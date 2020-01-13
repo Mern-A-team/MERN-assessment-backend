@@ -1,0 +1,23 @@
+{
+  "name": "mern-assessment-backend",
+  "version": "1.0.0",
+  "description": "A backend api for serving a REACT archivist photogragh managment application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Roakz/MERN-assessment-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Roakz/MERN-assessment-backend/issues"
+  },
+  "homepage": "https://github.com/Roakz/MERN-assessment-backend#readme",
+  "devDependencies": {
+    "mocha": "^7.0.0"
+  }
+}
