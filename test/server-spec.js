@@ -15,7 +15,7 @@ const { expect } = chai
 
 // Our first test simply ensures that our server is connected and returns a
 // welcome message from the home api route.
-describe('Server', function() {
+describe('Server Tests', function() {
 	it('welcomes user to the api', done => {
 		chai
 			.request(app)
