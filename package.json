@@ -2,12 +2,12 @@
   "name": "mern-assessment-backend",
   "version": "1.0.0",
   "description": "Back end Node.js/express API for serving a REACT front-end archival photogragh app. ",
-  "main": "server.js",
+  "main": "app.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,12 @@
   },
   "homepage": "https://github.com/Roakz/MERN-assessment-backend#readme",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "dotenv": "^8.2.0",
     "mocha": "^7.0.0"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
