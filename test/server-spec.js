@@ -1,3 +1,5 @@
+process.env.NODE_ENV = "test"
+
 // server test file configuration allowing access to the chai and chai-http libraries.
 const chai = require('chai')
 const chaiHttp = require('chai-http')
@@ -6,7 +8,7 @@ const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 
 // Pulling in our server from app
-const app = require('../app')
+const {app} = require('../app')
 
 // destructure expect assertion from chai
 const { expect } = chai
@@ -24,4 +26,6 @@ describe('Server', function() {
 				done()
 			})
 	})
+
+	// it('connects to mongoDB', done => {})
 })
