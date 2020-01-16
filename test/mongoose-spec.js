@@ -8,7 +8,8 @@ const chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 
 // Pulling in our server from app
-const { app, mongoose } = require('../app')
+const { app } = require('../app')
+const { mongoose } = require('../config/mongoose-connection')
 
 // destructure expect assertion from chai
 const { expect } = chai
