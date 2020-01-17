@@ -17,5 +17,6 @@ const users = [
 ]
 
 // connect to mongo with mongoose and seed data here.
+// to be complete once the user schema is built.
 
 
