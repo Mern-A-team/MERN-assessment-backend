@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --exit"
+    "test": "mocha --recursive --exit"
   },
   "repository": {
     "type": "git",

@@ -30,21 +30,4 @@ describe('Mongoose connection Tests', function() {
 			NODE_ENV = 'test'
 		})
 	})
-	describe('User schema Tests', function() {
-		describe('username validation', function() {
-			it('should be required')
-			it('should be a string')
-			it('should be over more than 3 characters long with no spaces')
-		})
-		describe('password validation', function() {
-			it('should be required')
-			it('should be a string')
-			it('should be at least 6 characters')
-			it('should have at least one number and 1 special character')
-		})
-		describe('role validation', function() {
-			it('should be required')
-			it('should be either admin, volunteer or guest')
-		})
-	})
 })
