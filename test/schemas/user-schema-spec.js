@@ -4,23 +4,17 @@ const userModel = require('../../database/schemas/userSchema')
 
 // server test file configuration allowing access to the chai and chai-http libraries.
 const chai = require('chai')
-const chaiHttp = require('chai-http')
-
-// Pulling in our server from app
-const { app } = require('../../app')
 
 // destructure expect assertion from chai
 const { expect } = chai
 const { mongoose } = require('../../config/mongoose-connection')
 
 describe('User schema Tests', function() {
-	before(async function() {
+	// CLear all database records
+	before(async function(done) {
 		console.log(mongoose.connection.name)
 		await mongoose.connection.dropCollection('users')
-		// userModel.deleteMany({})
-	})
-	after(async () => {
-		await mongoose.connection.dropCollection('users')
+		.then(done())
 	})
 
 	describe('username validation', function() {
@@ -45,18 +39,20 @@ describe('User schema Tests', function() {
 			})
 		})
 
-		let notString = new userModel({
-			username: 123.5,
-			password: 'password1$',
-			role: 'volunteer'
-		})
+		it('should confirm username is a string', async function(done) {
+			let userString = {
+				username: 'User',
+				password: 'password1$',
+				role: 'volunteer'
+			}
 
-		it('should fail if not a string', function(done) {
-			notString.save(err => {
-				console.log(err)
-				// expect(err.name).to.equal('ValidationError')
-				done()
-			})
+			await userModel
+				.create(userString)
+				.then(user => {
+					expect(user.username).to.be.a('string')
+				})
+				.catch(err => console.log(err))
+				.then(done())
 		})
 		it('should return a custom errror message if not a string')
 		it('should be over more than 3 characters long with no spaces')
@@ -72,7 +68,9 @@ describe('User schema Tests', function() {
 		it('should be either admin, volunteer or guest')
 	})
 
-	// after(async function() {
-
-	// })
+	// Clear all test database records
+	after(async function(done) {
+		await mongoose.connection.dropCollection('users')
+		.then(done())
+	})
 })
