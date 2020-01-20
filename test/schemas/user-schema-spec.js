@@ -1,11 +1,10 @@
 process.env.NODE_ENV = 'test'
 
+const userSchema = require('../../database/schemas/userSchema')
+
 // server test file configuration allowing access to the chai and chai-http libraries.
 const chai = require('chai')
 const chaiHttp = require('chai-http')
-
-// Tell chai to use the chaiHttp module.
-chai.use(chaiHttp)
 
 // Pulling in our server from app
 const { app } = require('../../app')
@@ -16,32 +15,33 @@ const { mongoose } = require('../../config/mongoose-connection')
 
 describe('User schema Tests', function() {
 	before(function() {
-		console.log('Connected to', mongoose.connection.name)
+		console.log(mongoose.connection.name)
 	})
 
 	describe('username validation', function() {
+		let noUsername = new userSchema({
+			username: '',
+			password: 'password1$',
+			role: 'volunteer'
+		})
+
+		it('should return a custom error message', function(done) {
+			noUsername.save(err => {
+				let error = err.errors.username.message
+				expect(error).to.equal('The username field is required!')
+				done()
+			})
+		})
+
 		it('should be required', function(done) {
-			chai
-				.request(app)
-				.post('/user/register')
-				.send({ username: '', password: 'password1$', role: 'volunteer' })
-				.end(function(err, res) {
-					expect(err).to.be('Username must be supplied')
-					expect(res).to.have.status(422)
-				})
-			done()
+			noUsername.save(err => {
+				expect(err)
+				done()
+			})
 		})
-		it('should be a string', function() {
-			chai
-				.request(app)
-				.post('/user/register')
-				.send({ username: 465, password: 'password1$', role: 'volunteer' })
-				.end(function(err, res) {
-					expect(err).to.be('username must be a string of characters')
-					expect(res).to.have.status(400)
-				})
-			done()
-		})
+		// it('should be a string', function(done) {
+		// 	done()
+		// })
 		it('should be over more than 3 characters long with no spaces')
 	})
 	describe('password validation', function() {
@@ -55,7 +55,4 @@ describe('User schema Tests', function() {
 		it('should be either admin, volunteer or guest')
 	})
 
-	// after(function() {
-	// 	mongoose.connection.dropDatabase()
-	// })
 })
