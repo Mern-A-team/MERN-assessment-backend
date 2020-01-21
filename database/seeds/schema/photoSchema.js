@@ -13,7 +13,7 @@ const Photo = new Schema(
         unique: true
     },
     category: {
-        type: String,
+        type: Array,
         required: true,
         default: "Unassigned"
     },

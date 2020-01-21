@@ -34,7 +34,8 @@ describe('Photo schema tests', function() {
             idNumber: "mmb-255",
             category: "person",
             location: "file",
-            description: "handsome fellow on a hill"
+            description: "handsome fellow on a hill",
+            fileRef: true,
         })
 
 		it('should be required', function(done) {
@@ -124,7 +125,7 @@ describe('Photo schema tests', function() {
     })
 
 	describe('category validation', function() {
-        let category = new photoModel ({
+        let categoryTest = new photoModel ({
             name: '',
             idNumber: "mmb-255",
             category: [],
@@ -133,25 +134,70 @@ describe('Photo schema tests', function() {
             fileRef: true
         })
 
-        it('should be a string', function(done) {
-            category.save(err => {
+        it('should be an array', function(done) {
+            categoryTest.save(err => {
                 expect(err.name).to.equal("ValidationError")
-                console.log(err)
                 done()
             })
         })
-        
-        it('should be required')
-        it('should be a default of "Unassigned"')
+        it('should be required', function(done) {
+            categoryTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
+        it('should be a default of "Unassigned"', function(done) {
+            categoryTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
     })
 
     describe('location validation', function() {
-		it('should be a string')
-        it('should be a default of ""')
+        let locationTest = new photoModel ({
+            name: '',
+            idNumber: "mmb-255",
+            category: [],
+            location: "file",
+            description: "handsome fellow on a hill",
+            fileRef: true
+        })
+        it('should be a string', function(done) {
+            locationTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
+        it('should be a default of ""', function(done) {
+            locationTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
     })
 
     describe('description validation', function() {
-		it('should be a string')
-        it('should be required')
+        let descriptionTest = new photoModel ({
+            name: '',
+            idNumber: "mmb-255",
+            category: [],
+            location: "file",
+            description: "handsome fellow on a hill",
+            fileRef: true
+        })
+        
+        it('should be a string', function(done) {
+            descriptionTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
+        it('should be required', function(done) {
+            descriptionTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
+        })
     })
 })
