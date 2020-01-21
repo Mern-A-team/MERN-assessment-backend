@@ -1,14 +1,16 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-const Photo = new Schema({
+const Photo = new Schema(
+    {
     name: {
         type: String,
         required: true
     },
     idNumber: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     category: {
         type: String,
@@ -28,5 +30,12 @@ const Photo = new Schema({
         required: true
     }
 })
+
+isUnique = idNumber => {
+	let result = photoModel.find({ idNumber: `${idNumber}` }).then(result => {
+		return result.length >= 1 ? false : true
+	})
+	return result
+}
 
 module.exports = mongoose.model("photos", Photo)

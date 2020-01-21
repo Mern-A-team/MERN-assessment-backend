@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.8.7"
+    "mongoose": "^5.8.7",
+    "mongoose-unique-validator": "^2.0.3"
   }
 }

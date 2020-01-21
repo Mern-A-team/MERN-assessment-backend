@@ -79,11 +79,68 @@ describe('Photo schema tests', function() {
             testIdNum.save(err => {
             expect(err.name).to.equal("ValidationError")
             done()
+            })
         })
+
+        // it('should be unique', function(done) {
+        //     if (mongoose.connection.dropCollection('photos')) {
+        //         mongoose.connection
+        //             .dropCollection('photos')
+        //             .catch(err => console.log(err))
+        //             .then(console.log("Dropped database before test"))
+        //     }
+        //     let testUniqueIdNum = new photoModel ({
+        //         name: 'Bob on a hill',
+        //         idNumber: 'mmb-226',
+        //         category: "person",
+        //         location: "file",
+        //         description: "handsome fellow on a hill",
+        //         fileRef: true
+        //     })
+        //     testUniqueIdNum.save(function(err) {
+        //         if (err) {
+        //             done(err)
+        //         }
+        //     })
+        //     let uniqueIdNumTest = new photoModel({
+        //         name: 'Bob on a hill',
+        //         idNumber: 'mmb-226',
+        //         category: "person",
+        //         location: "file",
+        //         description: "handsome fellow on a hill",
+        //         fileRef: true
+        //         })
+        //         uniqueIdNumTest.save(function(err) {
+        //             expect(err).to.exist
+        //             console.log(err)
+        //             expect(err).to.equal('ValidationError')
+        //             expect(err.errors.username.message).to.equal(
+        //                 "This ID number already exists. Check your item."
+        //             )
+        //         done()
+        //     })
+        // })
+
     })
 
 	describe('category validation', function() {
-		it('should be a string')
+        let category = new photoModel ({
+            name: '',
+            idNumber: "mmb-255",
+            category: [],
+            location: "file",
+            description: "handsome fellow on a hill",
+            fileRef: true
+        })
+
+        it('should be a string', function(done) {
+            category.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                console.log(err)
+                done()
+            })
+        })
+        
         it('should be required')
         it('should be a default of "Unassigned"')
     })
@@ -96,10 +153,5 @@ describe('Photo schema tests', function() {
     describe('description validation', function() {
 		it('should be a string')
         it('should be required')
-    })
-
-	// after(function() {
-	// 	mongoose.connection.dropDatabase()
-	// })
     })
 })
