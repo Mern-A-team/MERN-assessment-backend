@@ -97,6 +97,13 @@ describe('User schema Tests', function() {
 			})
 		})
 		it('Should be unique', async function(done) {
+			if (mongoose.connection.collection('users')) {
+				await mongoose.connection
+					.dropCollection('users')
+					.catch(err => console.log(err))
+					.then(console.log('success database droped before test'))
+			}
+
 			let userOne = {
 				username: 'spaceuser',
 				password: 'password1$',
@@ -107,14 +114,17 @@ describe('User schema Tests', function() {
 				password: 'password1$',
 				role: 'volunteer'
 			}
-			await userModel.create(userOne)
+
+			await userModel
+				.create(userOne)
+				.catch(err => console.log(err, 'USER ONE SAVE FAILED!'))
+
 			userModel.create(dupUser).catch(err => {
 				expect(err).to.exist
 				expect(err.name).to.equal('ValidationError')
 				expect(err.errors.username.message).to.equal(
 					'Im sorry! that username is taken.'
 				)
-
 				done()
 			})
 		})

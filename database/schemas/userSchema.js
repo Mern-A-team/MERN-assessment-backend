@@ -1,13 +1,26 @@
 const mongoose = require('mongoose')
-const { usernameValidator, isUnique } = require('./schema-validators')
+
+// Declare the validation function identifiers. We can't define the 
+// functions themselves until we have a valid model.
+let usernameValidator, isUnique // } = require('./schema-validators')
+
+const validators = [
+	{
+        // Wrap the real validator function in an anonymous function
+        // If we try to set it directly, we get an error that the variable is null
+        // This pattern is called "delegation"
+		validator: username => usernameValidator(username),
+		msg: 'Please remove any whitespace form your username.'
+	},
+	{ validator: username => isUnique(username), msg: 'Im sorry! that username is taken.' }
+]
 
 const UserSchema = new mongoose.Schema({
 	username: {
 		type: String,
 		required: [true, 'The username field is required!'],
 		minlength: [3, 'The username must contain 3 or more characters.'],
-        validate: [usernameValidator, 'Please remove any whitespace form your username.'],
-        validate: [isUnique, 'Im sorry! that username is taken.']
+		validate: validators
 	},
 	password: {
 		type: String
@@ -19,4 +32,18 @@ const UserSchema = new mongoose.Schema({
 
 // exporting the model to be used in other files. This is a one line sugar.
 // We are naming the model here and! assigning it the above defined schema.
-module.exports = mongoose.model('users', UserSchema)
+const userModel = mongoose.model('users', UserSchema)
+
+// Actually define the validation functions now we have a valid userModel
+usernameValidator = username => {
+	let regex = /^\S*$/
+	return username.match(regex)
+}
+
+isUnique = username => {
+	userModel.where({ username: `${username}` }).then(
+		result => result.length === 2 ? false : true
+	)
+}
+
+module.exports = userModel
