@@ -54,33 +54,74 @@ describe('User schema Tests', function() {
 				.then(user => {
 					expect(user.username).to.be.a('string')
 				})
-				.catch(err => console.log(err.name).to.equal('ValidationError'))
+				.catch(err => expect(err.name).to.equal('ValidationError'))
 				.then(done())
 		})
-		it('should be over 3 characters long with no spaces', async function(done) {
-			let shortUser = {
-				username: 'Usd',
+
+		let shortUser = {
+			username: 'Us',
+			password: 'password1$',
+			role: 'volunteer'
+		}
+
+		it('should be over 3 characters long', function(done) {
+			userModel.create(shortUser).catch(err => {
+				expect(err).to.exist
+				expect(err.name).to.equal('ValidationError')
+				done()
+			})
+		})
+		it('should return a custom errror message if not over 3 characters', function(done) {
+			userModel.create(shortUser).catch(err => {
+				expect(err).to.exist
+				expect(err.errors.username.message).to.equal(
+					'The username must contain 3 or more characters.'
+				)
+				done()
+			})
+		})
+		it('should not contain spaces & return a custom message', function(done) {
+			let spacedUser = {
+				username: 'space user',
 				password: 'password1$',
 				role: 'volunteer'
 			}
-			 
+			userModel.create(spacedUser).catch(err => {
+				expect(err).to.exist
+				expect(err.name).to.equal('ValidationError')
+				expect(err.errors.username.message).to.equal(
+					'Please remove any whitespace form your username.'
+				)
 
-			// I need some fucking help with this shit im over it!
-			expect(function() {
-				userModel.create(shortUser)
-				.catch(err => console.log(err))
-			}).to.throw()
-			
-			done()
-			
+				done()
+			})
 		})
-		it(
-			'should return a custom errror message if username is not over 3 characters no spaces'
-		)
+		it('Should be unique', async function(done) {
+			let userOne = {
+				username: 'spaceuser',
+				password: 'password1$',
+				role: 'volunteer'
+			}
+			let dupUser = {
+				username: 'spaceuser',
+				password: 'password1$',
+				role: 'volunteer'
+			}
+			await userModel.create(userOne)
+			userModel.create(dupUser).catch(err => {
+				expect(err).to.exist
+				expect(err.name).to.equal('ValidationError')
+				expect(err.errors.username.message).to.equal(
+					'Im sorry! that username is taken.'
+				)
+
+				done()
+			})
+		})
 	})
 	describe('password validation', function() {
 		it('should be required')
-		it('should be a string')
+		it('should be a Hash')
 		it('should be at least 6 characters')
 		it('should have at least one number and 1 special character')
 	})
