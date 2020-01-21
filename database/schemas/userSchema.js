@@ -1,18 +1,21 @@
 const mongoose = require('mongoose')
 
-// Declare the validation function identifiers. We can't define the 
+// Declare the validation function identifiers. We can't define the
 // functions themselves until we have a valid model.
 let usernameValidator, isUnique // } = require('./schema-validators')
 
 const validators = [
 	{
-        // Wrap the real validator function in an anonymous function
-        // If we try to set it directly, we get an error that the variable is null
-        // This pattern is called "delegation"
+		// Wrap the real validator function in an anonymous function
+		// If we try to set it directly, we get an error that the variable is null
+		// This pattern is called "delegation"
 		validator: username => usernameValidator(username),
 		msg: 'Please remove any whitespace form your username.'
 	},
-	{ validator: username => isUnique(username), msg: 'Im sorry! that username is taken.' }
+	{
+		validator: username => isUnique(username),
+		msg: 'Im sorry! that username is taken.'
+	}
 ]
 
 const UserSchema = new mongoose.Schema({
@@ -41,9 +44,10 @@ usernameValidator = username => {
 }
 
 isUnique = username => {
-	userModel.where({ username: `${username}` }).then(
-		result => result.length === 2 ? false : true
-	)
+	let result = userModel.find({ username: `${username}` }).then(result => {
+		return result.length >= 1 ? false : true
+	})
+	return result
 }
 
 module.exports = userModel

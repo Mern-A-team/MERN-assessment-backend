@@ -8,9 +8,11 @@ const usernameValidator = username => {
 }
 
 const isUnique = username => {
-	userModel.where({ username: `${username}` }).then(
-		result => result.length === 2 ? false : true
-	)
+	let result = await userModel.where({ username: `${username}` }).then(
+		result => { return result.length >= 1 ? false : true }
+    )
+    
+    return result
 }
 
 module.exports = {

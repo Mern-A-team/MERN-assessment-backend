@@ -83,8 +83,8 @@ describe('User schema Tests', function() {
 		it('should not contain spaces & return a custom message', function(done) {
 			let spacedUser = {
 				username: 'space user',
-				password: 'password1$',
-				role: 'volunteer'
+				password: 'passwd1$',
+				role: 'admin'
 			}
 			userModel.create(spacedUser).catch(err => {
 				expect(err).to.exist
@@ -96,36 +96,37 @@ describe('User schema Tests', function() {
 				done()
 			})
 		})
-		it('Should be unique', async function(done) {
+		it('Should be unique', function(done) {
 			if (mongoose.connection.collection('users')) {
-				await mongoose.connection
+				mongoose.connection
 					.dropCollection('users')
 					.catch(err => console.log(err))
 					.then(console.log('success database droped before test'))
 			}
 
-			let userOne = {
+			let userOne = new userModel({
 				username: 'spaceuser',
 				password: 'password1$',
 				role: 'volunteer'
-			}
-			let dupUser = {
-				username: 'spaceuser',
-				password: 'password1$',
-				role: 'volunteer'
-			}
+			})
+			userOne.save(function(err) {
+				if(err){
+					done(err)
+				}
+				let dupUser = new userModel({
+					username: 'spaceuser',
+					password: 'password1$',
+					role: 'volunteer'
+				})
 
-			await userModel
-				.create(userOne)
-				.catch(err => console.log(err, 'USER ONE SAVE FAILED!'))
-
-			userModel.create(dupUser).catch(err => {
-				expect(err).to.exist
-				expect(err.name).to.equal('ValidationError')
-				expect(err.errors.username.message).to.equal(
-					'Im sorry! that username is taken.'
-				)
-				done()
+				dupUser.save(function(err) {
+					expect(err).to.exist
+					expect(err.name).to.equal('ValidationError')
+					expect(err.errors.username.message).to.equal(
+						'Im sorry! that username is taken.'
+					)
+					done()
+				})
 			})
 		})
 	})
