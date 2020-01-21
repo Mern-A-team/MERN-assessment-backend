@@ -26,7 +26,8 @@ const UserSchema = new mongoose.Schema({
 		validate: validators
 	},
 	password: {
-		type: String
+		type: String,
+		required: [true, 'The password field is required!']
 	},
 	role: {
 		type: String

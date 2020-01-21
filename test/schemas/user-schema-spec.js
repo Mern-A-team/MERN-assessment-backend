@@ -20,6 +20,8 @@ before(async function(done) {
 // USER SCHEMA TESTS
 
 describe('User schema Tests', function() {
+	// USERNAME VALIDATION!!
+
 	describe('username validation', function() {
 		let noUsername = new userModel({
 			username: '',
@@ -110,7 +112,7 @@ describe('User schema Tests', function() {
 				role: 'volunteer'
 			})
 			userOne.save(function(err) {
-				if(err){
+				if (err) {
 					done(err)
 				}
 				let dupUser = new userModel({
@@ -130,9 +132,32 @@ describe('User schema Tests', function() {
 			})
 		})
 	})
+
+	// PASSWORD VALIDATION!!
+
 	describe('password validation', function() {
-		it('should be required')
-		it('should be a Hash')
+
+		const noPassword = new userModel({
+			username: 'UserBob',
+			password: '',
+			role: 'volunteer'
+		})
+
+		it('should be required', function(done) {
+				noPassword.save(err => {
+					expect(err).to.exist
+					expect(err.name).to.equal('ValidationError')
+					done()
+				})
+		})
+		it('should return a custom error message', function(done) {
+			noPassword.save(err => {
+				let error = err.errors.password.message
+				expect(error).to.equal('The password field is required!')
+				done()
+			})
+		})
+		it('should be a Hash not raw when stored')
 		it('should be at least 6 characters')
 		it('should have at least one number and 1 special character')
 	})
