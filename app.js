@@ -19,8 +19,10 @@ const PORT = process.env.PORT || 3001
 //  MIDDLEWARES
 // enables us to access json vai the req.body
 app.use(express.json())
-// instructing express to use the router from the routes file
-app.use(routes)
+
+// ROUTES
+app.use('/', routes) 
+app.use('/user', require('./routes/userRoutes'))
 
 //  SERVER LISTENING
 app.listen(PORT, () =>

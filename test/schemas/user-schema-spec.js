@@ -107,11 +107,6 @@ describe('User schema Tests', function() {
 			})
 		})
 		it('Should be unique', function(done) {
-			mongoose.connection
-				.dropCollection('users')
-				.catch(err => console.log(err))
-				.then(console.log('success database droped before test'))
-
 			let userOne = new userModel({
 				username: 'spaceuser',
 				password: 'password1$',
