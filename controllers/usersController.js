@@ -1,4 +1,5 @@
 const userModel = require('../database/schemas/userSchema')
+const bcrypt = require('bcrypt')
 
 // CRUD
 const createUser = (req, res) => {
@@ -16,10 +17,17 @@ const createUser = (req, res) => {
 			let message = err.errors[path].message
 			res.status(400).json(message)
 		} else {
-			user.save(function(err) {
-				if (!err) {
-					res.status(201)
-					res.json('User successfully created!')
+			bcrypt.hash(user.password, 10, function(err, hash) {
+				if (err) {
+					res.status(500).send()
+				} else {
+					user.password = hash
+					user.save(function(err) {
+						if (!err) {
+							res.status(201)
+							res.json('User successfully created!')
+						}
+					})
 				}
 			})
 		}

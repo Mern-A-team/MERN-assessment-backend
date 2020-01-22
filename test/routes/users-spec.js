@@ -12,7 +12,7 @@ const { expect } = chai
 const { mongoose } = require('../../config/mongoose-connection')
 const { app } = require('../../app')
 
-describe('User CRUD Testing', function() {
+describe('Route CRUD Testing', function() {
 	// Clear all database records
 	before(function(done) {
 		mongoose.connection
