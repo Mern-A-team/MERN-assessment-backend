@@ -30,7 +30,7 @@ describe('User controller tests', function() {
 		const bcrypt = require('bcrypt')
 		let user = {
 			username: 'hashUser',
-			password: 'Pass1$g',
+			password: 'Pass1$',
 			role: 'admin'
 		}
 
@@ -39,7 +39,6 @@ describe('User controller tests', function() {
 			.post('/user')
 			.send(user)
 			.end((err, res) => {
-				console.log(res)
 				if (err) {
 					done(err)
 				} else {
