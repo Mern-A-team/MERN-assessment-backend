@@ -12,6 +12,8 @@ const { expect } = chai
 const { mongoose } = require('../../config/mongoose-connection')
 const { photos } = require('../controllers/photos-controller-spec')
 
+
+
 // Get photo index
 describe('shows a gallery of all photos', funciton(done))
     it('should go to /photos', function() {
