@@ -137,8 +137,7 @@ describe('User schema Tests', function() {
 	// PASSWORD VALIDATION!!
 
 	describe('password validation', function() {
-		const bcrypt = require('bcrypt')
-
+		
 		const noPassword = new userModel({
 			username: 'UserBob',
 			password: '',

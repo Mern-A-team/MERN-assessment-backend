@@ -41,7 +41,7 @@ const UserSchema = new mongoose.Schema({
 	},
 	role: {
 		type: String,
-		required: true,
+		required: [true, "Please provide a user role."]
 	}
 })
 
