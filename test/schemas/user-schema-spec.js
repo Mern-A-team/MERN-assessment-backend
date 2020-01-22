@@ -31,16 +31,24 @@ describe('User schema Tests', function() {
 
 		it('should return a custom error message', function(done) {
 			noUsername.save(err => {
-				let error = err.errors.username.message
-				expect(error).to.equal('The username field is required!')
-				done()
+				if (err) {
+					let error = err.errors.username.message
+					expect(error).to.equal('The username field is required!')
+					done()
+				} else {
+					done(new Error('No error thrown test fails!'))
+				}
 			})
 		})
 
 		it('should be required', function(done) {
 			noUsername.save(err => {
-				expect(err.name).to.equal('ValidationError')
-				done()
+				if (err) {
+					expect(err.name).to.equal('ValidationError')
+					done()
+				} else {
+					done(new Error('No error thrown, test fails!'))
+				}
 			})
 		})
 
@@ -99,13 +107,6 @@ describe('User schema Tests', function() {
 			})
 		})
 		it('Should be unique', function(done) {
-			if (mongoose.connection.collection('users')) {
-				mongoose.connection
-					.dropCollection('users')
-					.catch(err => console.log(err))
-					.then(console.log('success database droped before test'))
-			}
-
 			let userOne = new userModel({
 				username: 'spaceuser',
 				password: 'password1$',
