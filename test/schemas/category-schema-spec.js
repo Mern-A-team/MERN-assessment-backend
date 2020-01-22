@@ -41,7 +41,7 @@ describe('Category schema tests', function() {
 		it('should be unique', function(done) {
 			new categoryModel({
 				name: 'testCategory',
-				parent: 'none'
+				parent: 'All'
 			}).save(function(err) {
 				console.log('Category one is saved!')
 				if (err) {
@@ -49,7 +49,7 @@ describe('Category schema tests', function() {
 				} else {
 					new categoryModel({
 						name: 'testCategory',
-						parent: 'none'
+						parent: 'All'
 					}).save(function(err) {
 						expect(err).to.exist
 						expect(err.name).to.equal('ValidationError')
@@ -66,7 +66,7 @@ describe('Category schema tests', function() {
 			it('only accepts existing catgegories as a parent', function(done) {
 				new categoryModel({
 					name: 'category',
-					parent: 'none'
+					parent: 'All'
 				}).save(function(err) {
 					console.log('category one saved!')
 					if (err) {
