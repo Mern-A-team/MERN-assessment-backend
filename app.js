@@ -24,7 +24,7 @@ app.use(routes)
 
 //  SERVER LISTENING
 app.listen(PORT, () =>
-	console.log(`Archivise server listening on port ${PORT}!`)
+	console.log(`Archivise api server listening on port ${PORT}!`)
 )
 
 // exporting the app instance

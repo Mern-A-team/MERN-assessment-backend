@@ -99,12 +99,10 @@ describe('User schema Tests', function() {
 			})
 		})
 		it('Should be unique', function(done) {
-			if (mongoose.connection.collection('users')) {
-				mongoose.connection
-					.dropCollection('users')
-					.catch(err => console.log(err))
-					.then(console.log('success database droped before test'))
-			}
+			mongoose.connection
+				.dropCollection('users')
+				.catch(err => console.log(err))
+				.then(console.log('success database droped before test'))
 
 			let userOne = new userModel({
 				username: 'spaceuser',
