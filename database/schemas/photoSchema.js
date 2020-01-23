@@ -23,14 +23,13 @@ const PhotoSchema = new Schema(
         required: true
         // unique: true
     },
-    category: {
-        type: Array,
-        required: true,
-        default: "Unassigned"
-    },
     location: {
         type: String,
         default: ""
+    },
+    category: {
+        type: Array,
+        required: true,
     },
     description: {
         type: String,

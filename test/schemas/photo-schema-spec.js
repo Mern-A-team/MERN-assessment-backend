@@ -23,25 +23,23 @@ describe('Photo schema tests', function() {
     })
 
     describe('photo name validation', function() {
-
-		it('should be required', function(done) {
-            let noPhotoName = new photoModel ({
+        it('should be required', function(done) {
+            let photoTest = new photoModel ({
             name: '',
             idNumber: "mmb-255",
             category: "person",
             location: "file",
             description: "handsome fellow on a hill",
-            fileRef: true,
-        })
-            noPhotoName.save(err => {
-                expect(err.name).to.equal("ValidationError")
+            fileRef: "fileRef"
+        }).save(err => {
+            expect(err.name).to.equal("ValidationError")
             })
-            done()
+        done()
         })
 
 		it('should be a string', function(done) {
             let photo = new photoModel ({
-                name: "String",
+                name: " String name",
                 idNumber: "mmb-255",
                 category: "person",
                 location: "file",
@@ -78,14 +76,13 @@ describe('Photo schema tests', function() {
         })
 
         it('should be unique', function(done) {
-            
             let testUniqueIdNum = new photoModel ({
                 name: 'Bob on a hill',
                 idNumber: 'mmb-226',
                 category: "person",
                 location: "file",
                 description: "handsome fellow on a hill",
-                fileRef: true
+                fileRef: "fileRef"
             })
             testUniqueIdNum.save(function(err) {
                 if (err) {
@@ -98,7 +95,7 @@ describe('Photo schema tests', function() {
                     category: "person",
                     location: "file",
                     description: "handsome fellow on a hill",
-                    fileRef: true
+                    fileRef: "fileRef"
                     })
                 uniqueIdNumTest
                     .save(function(err) {
@@ -116,28 +113,30 @@ describe('Photo schema tests', function() {
     })
 
 	describe('category validation', function() {
-        let categoryTest = new photoModel ({
-            name: '',
-            idNumber: "mmb-255",
-            category: [],
-            location: "file",
-            description: "handsome fellow on a hill",
-            fileRef: true
+        it('should be an array', function(done) {
+            let categoryTest = new photoModel ({
+                name: 'testPhoto',
+                idNumber: "mmb-255",
+                category: "not an array",
+                location: "file",
+                description: "handsome fellow on a hill",
+                fileRef: "fileRef"
+            })
+            categoryTest.save(err => {
+                expect(err.name).to.equal("ValidationError")
+                done()
+            })
         })
 
-        it('should be an array', function(done) {
-            categoryTest.save(err => {
-                expect(err.name).to.equal("ValidationError")
-                done()
-            })
-        })
         it('should be required', function(done) {
-            categoryTest.save(err => {
-                expect(err.name).to.equal("ValidationError")
-                done()
+            let categoryTest = new photoModel ({
+                name: 'testPhoto',
+                idNumber: "mmb-255",
+                category: "",
+                location: "file",
+                description: "handsome fellow on a hill",
+                fileRef: "fileRef"
             })
-        })
-        it('should be a default of "Unassigned"', function(done) {
             categoryTest.save(err => {
                 expect(err.name).to.equal("ValidationError")
                 done()
@@ -150,9 +149,9 @@ describe('Photo schema tests', function() {
             name: '',
             idNumber: "mmb-255",
             category: [],
-            location: "file",
+            location: [],
             description: "handsome fellow on a hill",
-            fileRef: true
+            fileRef: "fileRef"
         })
         it('should be a string', function(done) {
             locationTest.save(err => {
@@ -170,12 +169,12 @@ describe('Photo schema tests', function() {
 
     describe('description validation', function() {
         let descriptionTest = new photoModel ({
-            name: '',
+            name: 'testPhoto',
             idNumber: "mmb-255",
             category: [],
             location: "file",
             description: "handsome fellow on a hill",
-            fileRef: true
+            fileRef: "fileRef"
         })
         
         it('should be a string', function(done) {
