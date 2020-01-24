@@ -5,18 +5,15 @@ const PhotoController = require("../controllers/photo_controller");
 
 // router.use(userAuthenticated)
 
-router.get("/", function(req, res, next) {
-    res.send('Gallery of photos')
-})
-router.get("/search", function(req, res, next) {
-    res.send("search function")
-})
-router.get("/addPhoto", function(req, res) { res.json({ message: "Add a Photo" }) })
+router.get("/", function(req, res, next) {res.send('GET request to gallery of photos') })
+router.get("/search", function(req, res, next) {res.send("GET request for search function") })
 
-router.get('/:id', function(req, res, next) {
-    res.send("Show page")
-})
+router.get("/addPhoto", function(req, res) { res.json({ message: "GET request for adding a photo" }) })
+router.post("/addPhoto", function(req, res) { res.json({ "message" : "POST request for adding photo"})})
 
+router.get('/:id', function(req, res, next) {res.send("GET request for show page") })
+
+router.post('/:id', function(req, res) { res.send("POST for editing photo") })
 
 
 

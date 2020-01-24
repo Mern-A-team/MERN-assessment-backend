@@ -1,41 +1,66 @@
 const photoModel  = require("../database/schemas/photoSchema")
 
+// Need to ensure user validation before any crud can be implemented.
+// const userValidation = require("../controllers/usersController")
+
 async function index(req, res) {
-    return res.json("returning index")
+    const photos = []
+    getAllPhotos(req).exec((err, photos) => {
+        console.log("photos", photos)
+        if (err) {
+            res.status(500);
+            res.json({
+                error: err.message
+            });
+        }
+        res.json(photos);
+    });
 }
 
+async function photo_gallery(req, res) {
+    return res.json("NOT IMPLEMENTED: photo gallery")
+}
+
+// Create
 async function addPhoto (req, res) {
     const { name, idNumber, location, category, description, fileRef } = req.body
     const photo = new photoModel( { name, idNumber, category, description, location, description, fileRef })
-        .catch(err => res.status(500).send(err))
-        res.redirect("/photos")
-    }
+        photos.push(photo)
+        return res.render("Success")
+}
 
 async function showPhoto(req, res) {
     let { id } = req.params;
     let photo = await photoModel.findById(id);
+
     res.render("/:id", { photo });
 }
 
-
-async function editPhoto(req, res) {
-
+async function editPhotoGet(req, res) {
+    res.send("NOT IMPLEMENTED: photo update GET")
 }
 
-async function search(req, res) {
-    res.redirect("/search")
-}
-
-async function deletePhoto(req, res) {
-
+async function editPhotoPost(req, res) {
+    res.send("NOT IMPLEMENTED: photo update POST")
 }
 
 
-module.exports = { 
+async function deletePhotoGet(req, res) {
+    res.send("NOT IMPLEMENTED: delete photo GET")
+}
+
+
+async function deletePhotoPost(req, res) {
+    res.send("NOT IMPLEMENTED: delete photo POST")
+}
+
+module.exports = {
     index,
+    photo_gallery,
     addPhoto,
-    editPhoto,
     showPhoto,
-    search,
-    deletePhoto
+    editPhotoGet,
+    editPhotoPost,
+    deletePhotoGet,
+    deletePhotoPost
 }

@@ -10,8 +10,8 @@ const { mongoose } = require('../../config/mongoose-connection')
 const { app } = require('../../app')
 
 
-describe('CRUD photo testing', function() {
-    before(function(done) {
+describe('Photo testing', () => {
+    before((done) => {
         mongoose.connection
             .dropCollection('photos')
             .catch(err => {
@@ -23,26 +23,26 @@ describe('CRUD photo testing', function() {
     })
 
     // Get photo index
-    describe('testing routing', function() {
-        it('should return a 200', function(done) {
-            chai.request(app)
+    it('should get "/photos"', (done) => {
+        chai.request(app)
             .get('/photos/test')
-            .end(function(err, res){
+            .end((err, res) => {
                 if (!err) {
                     expect(res).to.have.status(200)
-                    expect(res.body.message).to.equal('Welcome To success')
-                    done()
-                } else {
-                    done(err)
-                }
-            })
+                    expect(res.body.message).to.equal('Photo route test Success')
+                    done() 
+            } else {
+                done(err)
+            }
         })
     })
+})
 
     // Post photo
-    describe('should create photo', function(){
-        it('should return a 201', function(done) {
-            chai.request(app)
+describe('POST a photo', function() {
+    it('should return a 201', function(done) {
+        chai
+            .request(app)
             .get('/photos/id')
             .send({
                 name: "Portrait of man",
@@ -61,10 +61,9 @@ describe('CRUD photo testing', function() {
                 expect(res).have.status(200)
                 done()
             })
-        })
     })
+})
 // Put photo
 // Delete photo
-})
 
 // module.exports = Router
