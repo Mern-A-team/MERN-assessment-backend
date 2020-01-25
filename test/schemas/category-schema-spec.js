@@ -2,12 +2,8 @@
 process.env.NODE_ENV = 'test'
 // requiring the userModel form the userSchema file
 const categoryModel = require('../../database/schemas/categorySchema')
-// server test file configuration allowing access to the chai and chai-http libraries.
-const chai = require('chai')
-// destructure expect assertion from chai
-const { expect } = chai
-// require the mongoose instance from the mongoose connect file.
-const { mongoose } = require('../../config/mongoose-connection')
+// destructuring the config cariuables from the config file
+const { mongoose, expect } = require('../test-config')
 
 // CATEGORY SCHEMA TESTS!!
 

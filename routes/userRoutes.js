@@ -2,6 +2,7 @@
 const express = require('express')
 const router = express.Router()
 const usersController = require('../controllers/usersController')
+const authController = require('../controllers/authController')
 
 router.get('/test', (req, res) => {
 	// Im a teapot
@@ -9,5 +10,6 @@ router.get('/test', (req, res) => {
 	res.json({ message: 'User route test Success' })
 })
 router.post('/', usersController.createUser)
+router.post('/authorise', authController.authenticateUser)
 
 module.exports = router
