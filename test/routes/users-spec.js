@@ -2,8 +2,12 @@
 process.env.NODE_ENV = 'test'
 // destructuring the config variables from the config file
 const { mongoose, chai, chaiHttp, expect, app } = require('../test-config')
+// requiring bcrypt for password hashing in test
+const bcrypt = require('bcrypt')
 // Instructing chai to use the http module
 chai.use(chaiHttp)
+// requiring the user model to create a user instance bypassing route requirements for a test
+const userModel = require('../../database/schemas/userSchema')
 
 describe('Route CRUD Testing', function() {
 	// Clear all database records
@@ -73,6 +77,57 @@ describe('Route CRUD Testing', function() {
 						done()
 					}
 				})
+		})
+		it.only('should return a 401 if not admin role', function(done) {
+			bcrypt.hash('Llama1$', 10, (err, hash) => {
+				if (err) {
+					done(err)
+				} else {
+					userModel
+						.create({
+							username: 'TestWombat',
+							password: hash,
+							role: 'volunteer'
+						})
+						.then(res => {
+							console.log('user created')
+							chai
+								.request(app)
+								.post('/user/authorise')
+								.send({
+									username: 'TestWombat',
+									password: 'Llama1$',
+									role: 'volunteer'
+								})
+								.end((err, res) => {
+									if (err) {
+										done(err)
+									} else {
+										chai
+											.request(app)
+											.post('/user')
+											.set('Authorization', `Bearer ${res.body.token}`)
+											.send({
+												username: 'DontCreate',
+												password: hash,
+												role: 'Volunteer'
+											})
+											.end((err, res) => {
+												if (err) {
+													done(err)
+												} else {
+													expect(res.status).to.equal(401)
+													expect(res.body.errorMessage).to.equal(
+														'Permission denied. Admin task only!'
+													)
+													done()
+												}
+											})
+									}
+								})
+						})
+				}
+			})
 		})
 	})
 })
