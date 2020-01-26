@@ -17,7 +17,9 @@ router.get('/test', (req, res) => {
 router.post('/', (req, res) => {
 	isAdmin(req, res) ? usersController.createUser(req, res) : noAuth(req, res)
 })
-router.put('/:user_id', usersController.updateUser)
+router.put('/:user_id', (req, res) => {
+	isAdmin(req, res) ? usersController.updateUser(req, res) : noAuth(req, res)
+})
 router.post('/authorise', authController.authenticateUser)
 
 module.exports = router

@@ -9,7 +9,7 @@ chai.use(chaiHttp)
 // requiring the user model to create a user instance bypassing route requirements for a test
 const userModel = require('../../database/schemas/userSchema')
 // requiring the amdmin JWT token from the data file
-const { adminToken, createUser } = require('../data')
+const { adminToken, createUser, volunteerToken } = require('../data')
 
 describe('Route CRUD Testing', function() {
 	// Clear all database records
@@ -136,8 +136,28 @@ describe('Route CRUD Testing', function() {
 		})
 	})
 	describe('Edit User', function() {
-		it.skip('Should not update unless admin role is in token returning 401', function(done) {
-			chai.request(app).put('/user')
+		it('Should not update unless admin role is in token returning 401', function(done) {
+			//    user is created with a role of Guest
+			userModel.findOne({ username: 'EditUser' }).then(user => {
+				chai
+					.request(app)
+					.put(`/user/${user._id}`)
+					.set('Authorization', `Bearer ${volunteerToken}`)
+					.send({
+						role: 'volunteer'
+					})
+					.end((err, res) => {
+						if (err) {
+							done(err)
+						} else {
+							expect(res.status).to.equal(401)
+							expect(res.body.errorMessage).to.equal(
+								'Permission denied. Admin task only!'
+							)
+							done()
+						}
+					})
+			})
 		})
 		it('Should return a 200 when updated', function(done) {
 			//    user is created with a role of Guest
@@ -147,7 +167,7 @@ describe('Route CRUD Testing', function() {
 					chai
 						.request(app)
 						.put(`/user/${user._id}`)
-						.set('Authorize', `Bearer ${adminToken}`)
+						.set('Authorization', `Bearer ${adminToken}`)
 						.send({
 							role: 'volunteer'
 						})
@@ -158,8 +178,10 @@ describe('Route CRUD Testing', function() {
 								userModel.findOne({ username: 'EditUser' }).then(user => {
 									expect(user.role).to.equal('volunteer')
 								})
-							expect(res.body.message).to.equal('User details successfully updated!')
-							done()
+								expect(res.body.message).to.equal(
+									'User details successfully updated!'
+								)
+								done()
 							}
 						})
 				})
