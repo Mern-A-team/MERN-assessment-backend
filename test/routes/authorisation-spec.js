@@ -1,8 +1,7 @@
 process.env.NODE_ENV = 'test'
 
 const { mongoose, chai, chaiHttp, expect, app } = require('../test-config')
-const userModel = require('../../database/schemas/userSchema')
-
+const { adminToken } = require('../data')
 chai.use(chaiHttp)
 
 describe('Authorisation Tests', function() {
@@ -24,6 +23,7 @@ describe('Authorisation Tests', function() {
 					chai
 						.request(app)
 						.post('/user')
+						.set('Authorization', `Bearer ${adminToken}`)
 						.send(user)
 						.end((err, res) => {
 							if (err) {

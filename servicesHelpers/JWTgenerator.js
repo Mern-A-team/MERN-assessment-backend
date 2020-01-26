@@ -4,7 +4,6 @@ const JWT = require('jsonwebtoken')
 const expiry = '30s'
 // passing in the user to insert the payload
 function generateToken(user) {
-    
 	const token = JWT.sign(
 		{
 			username: user.username,

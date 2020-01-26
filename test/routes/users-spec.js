@@ -8,6 +8,8 @@ const bcrypt = require('bcrypt')
 chai.use(chaiHttp)
 // requiring the user model to create a user instance bypassing route requirements for a test
 const userModel = require('../../database/schemas/userSchema')
+// requiring the amdmin JWT token from the data file
+const { adminToken } = require('../data')
 
 describe('Route CRUD Testing', function() {
 	// Clear all database records
@@ -43,6 +45,7 @@ describe('Route CRUD Testing', function() {
 			chai
 				.request(app)
 				.post('/user')
+				.set('Authorization', `Bearer ${adminToken}`)
 				.send({
 					username: 'TestChicken',
 					password: 'Llama1$',
@@ -62,6 +65,7 @@ describe('Route CRUD Testing', function() {
 			chai
 				.request(app)
 				.post('/user')
+				.set('Authorization', `Bearer ${adminToken}`)
 				.send({
 					username: '',
 					password: 'Test1$',
@@ -78,7 +82,7 @@ describe('Route CRUD Testing', function() {
 					}
 				})
 		})
-		it.only('should return a 401 if not admin role', function(done) {
+		it('should return a 401 if not admin role', function(done) {
 			bcrypt.hash('Llama1$', 10, (err, hash) => {
 				if (err) {
 					done(err)

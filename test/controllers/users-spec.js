@@ -1,18 +1,13 @@
 // Setting the test environment
 process.env.NODE_ENV = 'test'
-// server test file configuration allowing access to the chai and chai-http libraries.
-const chai = require('chai')
-// destructure expect assertion from chai
-const chaiHttp = require('chai-http')
-// Instructing chai to use the http module
-chai.use(chaiHttp)
-// destructuring expect out of chai for use as assertion
-const { expect } = chai
-// require the mongoose instance from the mongoose connect file.
-const { mongoose } = require('../../config/mongoose-connection')
 // require the user model
 const userModel = require('../../database/schemas/userSchema')
-const { app } = require('../../app')
+// Destructuring the config variables from the config file
+const {app, chaiHttp, chai, expect, mongoose} = require('../test-config')
+// instructing chai to use the http module
+chai.use(chaiHttp)
+// requiring the hardcoded admin token from the admin file
+const {adminToken} = require('../data')
 
 describe('User controller tests', function() {
 	before(function(done) {
@@ -37,6 +32,7 @@ describe('User controller tests', function() {
 		chai
 			.request(app)
 			.post('/user')
+			.set('Authorization', `Bearer ${adminToken}`)
 			.send(user)
 			.end((err, res) => {
 				if (err) {

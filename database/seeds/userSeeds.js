@@ -1,22 +1,55 @@
+const userModel = require('../schemas/userSchema')
+const {
+	mongooseConnect,
+	mongoose
+} = require('../../config/mongoose-connection')
+require('dotenv').config()
+
+async function connect() {
+	let connection = await mongooseConnect(process.env.NODE_ENV)
+	mongoose.connection.dropCollection('users')
+}
+
+connect()
+
 const users = [
-	{
-		username: 'Admin user',
+	new userModel({
+		username: 'AdminUser',
 		password: 'Admin1$',
 		role: 'admin'
-	},
-	{
-		username: 'Volunteer user',
+	}),
+	new userModel({
+		username: 'VolunteerUser',
 		password: 'Volunteer1$',
 		role: 'volunteer'
-	},
-	{
-		username: 'Guest user',
+	}),
+	new userModel({
+		username: 'GuestUser',
 		password: 'Guest1$',
-		role: 'admin'
-	}
+		role: 'guest'
+	})
 ]
 
-// connect to mongo with mongoose and seed data here.
-// to be complete once the user schema is built.
+let done = 0
 
+for (let i = 0; i < users.length; i++) {
+	users[i].save((err, result) => {
+		if (err) {
+			console.log(err.name)
+			return exit(new Error('error seeding process cancelled'))
+		} else {
+			console.log('seeded')
+			done++
+			if (done === users.length) {
+				exit()
+			}
+		}
+	})
+}
 
+let exit = (error) => {
+	if (error){
+		console.log(error)
+	}
+	mongoose.connection.close().then(console.log(' connection closed'))
+}
