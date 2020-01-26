@@ -47,6 +47,22 @@ const createUser = (req, res) => {
 	})
 }
 
+const updateUser = (req, res) => {
+	userModel.findByIdAndUpdate(
+		req.params.user_id,
+		req.body,
+		{ new: true },
+		(err, updatedUser) => {
+			if (err) {
+				res.status(500).json('something went wrong.')
+			} else {
+				res.status(200).json({ message: 'User details successfully updated!' })
+			}
+		}
+	)
+}
+
 module.exports = {
-	createUser
+	createUser,
+	updateUser
 }

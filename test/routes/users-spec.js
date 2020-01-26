@@ -9,7 +9,7 @@ chai.use(chaiHttp)
 // requiring the user model to create a user instance bypassing route requirements for a test
 const userModel = require('../../database/schemas/userSchema')
 // requiring the amdmin JWT token from the data file
-const { adminToken } = require('../data')
+const { adminToken, createUser } = require('../data')
 
 describe('Route CRUD Testing', function() {
 	// Clear all database records
@@ -21,6 +21,7 @@ describe('Route CRUD Testing', function() {
 					expect(err).to.exist
 				}
 			})
+			.then(createUser())
 			.then(done())
 	})
 
@@ -132,6 +133,37 @@ describe('Route CRUD Testing', function() {
 						})
 				}
 			})
+		})
+	})
+	describe('Edit User', function() {
+		it.skip('Should not update unless admin role is in token returning 401', function(done) {
+			chai.request(app).put('/user')
+		})
+		it('Should return a 200 when updated', function(done) {
+			//    user is created with a role of Guest
+			userModel
+				.findOne({ username: 'EditUser' })
+				.then(user => {
+					chai
+						.request(app)
+						.put(`/user/${user._id}`)
+						.set('Authorize', `Bearer ${adminToken}`)
+						.send({
+							role: 'volunteer'
+						})
+						.end((err, res) => {
+							if (err) {
+								done(err)
+							} else {
+								userModel.findOne({ username: 'EditUser' }).then(user => {
+									expect(user.role).to.equal('volunteer')
+								})
+							expect(res.body.message).to.equal('User details successfully updated!')
+							done()
+							}
+						})
+				})
+				.catch(err => done(err))
 		})
 	})
 })
