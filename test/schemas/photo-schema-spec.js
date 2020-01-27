@@ -64,8 +64,8 @@ describe('Photo schema tests', function() {
         it('should be required', function(done) {
             testIdNum.save(err => {
                 expect(err.name).to.equal("ValidationError")
-                done()
             })
+            done()
         })
 
         it('should be a string', function(done) {
@@ -176,7 +176,7 @@ describe('Photo schema tests', function() {
             description: "handsome fellow on a hill",
             fileRef: "fileRef"
         })
-        
+
         it('should be a string', function(done) {
             descriptionTest.save(err => {
                 expect(err.name).to.equal("ValidationError")
