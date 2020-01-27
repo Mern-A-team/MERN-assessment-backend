@@ -39,7 +39,7 @@ describe('Photo schema tests', function() {
 
 		it('should be a string', function(done) {
             let photo = new photoModel ({
-                name: " String name",
+                name: ["not a string"],
                 idNumber: "mmb-255",
                 category: "person",
                 location: "file",
@@ -55,7 +55,7 @@ describe('Photo schema tests', function() {
 	describe('idNumber validation', function() {
         let testIdNum = new photoModel ({
             name: 'Bob on a hill',
-            idNumber: 'mmb-225',
+            idNumber: 654,
             category: "person",
             location: "file",
             description: "handsome fellow on a hill"
@@ -68,11 +68,23 @@ describe('Photo schema tests', function() {
             done()
         })
 
-        it('should be a string', function(done) {
-            testIdNum.save(err => {
-            expect(err.name).to.equal("ValidationError")
-            done()
+        it('should confirm photo ID # is a string', async function(done) {
+            let idNumTest = new photoModel ({
+                name: 'testPhoto',
+                idNumber: ["mmb-255"],
+                category: ["not an array"],
+                location: "file",
+                description: "handsome fellow on a hill",
+                fileRef: "fileRef"
             })
+
+            await photoModel
+                .create(idNumTest)
+                .then(photo => {
+                    expect(photo.idNumber).to.be.a('string')
+                })
+                .catch(err => expect(err.name).to.equal('ValidationError'))
+                .then(done())
         })
 
         it('should be unique', function(done) {
@@ -113,7 +125,7 @@ describe('Photo schema tests', function() {
     })
 
 	describe('category validation', function() {
-        it('should be an array', function(done) {
+        it('should have category as an array', async function(done) {
             let categoryTest = new photoModel ({
                 name: 'testPhoto',
                 idNumber: "mmb-255",
@@ -122,10 +134,14 @@ describe('Photo schema tests', function() {
                 description: "handsome fellow on a hill",
                 fileRef: "fileRef"
             })
-            categoryTest.save(err => {
-                expect(err.name).to.equal("ValidationError")
-                done()
-            })
+
+            await photoModel
+                .create(categoryTest)
+                .then(photo => {
+                    expect(photo.category).to.be.a('Array')
+                })
+                .catch(err => expect(err.name).to.equal('ValidationError'))
+                .then(done())
         })
 
         it('should be required', function(done) {
