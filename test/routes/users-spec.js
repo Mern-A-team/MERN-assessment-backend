@@ -169,7 +169,8 @@ describe('Route CRUD Testing', function() {
 						.put(`/user/${user._id}`)
 						.set('Authorization', `Bearer ${adminToken}`)
 						.send({
-							role: 'volunteer'
+							role: 'volunteer',
+							password: 'Another1$'
 						})
 						.end((err, res) => {
 							if (err) {
@@ -186,6 +187,66 @@ describe('Route CRUD Testing', function() {
 						})
 				})
 				.catch(err => done(err))
+		})
+	})
+	describe('Get users', function() {
+		it('should return all users at get request to /user route giving status 200!', function(done) {
+			chai
+				.request(app)
+				.get('/user')
+				.set('Authorization', `Bearer ${adminToken}`)
+				.end((err, res) => {
+					if (err) {
+						done(err)
+					} else {
+						let expectedLength = res.body.users.length
+						userModel.find().then(users => {
+							expect(res.status).to.equal(200)
+							expect(users.length).to.equal(expectedLength)
+							done()
+						})
+					}
+				})
+		})
+	})
+
+	describe('User delete route', function() {
+		it('Should not delete unless admin role is in token returning 401', function(done) {
+			//    user is created with a role of Guest
+			userModel.findOne({ username: 'EditUser' }).then(user => {
+				chai
+					.request(app)
+					.delete(`/user/${user._id}`)
+					.set('Authorization', `Bearer ${volunteerToken}`)
+					.end((err, res) => {
+						if (err) {
+							done(err)
+						} else {
+							expect(res.status).to.equal(401)
+							expect(res.body.errorMessage).to.equal(
+								'Permission denied. Admin task only!'
+							)
+							done()
+						}
+					})
+			})
+		})
+		it('Should return a 200 and success message when complete', function(done) {
+			userModel.findOne({ username: 'EditUser' }).then(user => {
+				chai
+					.request(app)
+					.delete(`/user/${user._id}`)
+					.set('Authorization', `Bearer ${adminToken}`)
+					.end((err, res) => {
+						if (err) {
+							done(err)
+						} else {
+							expect(res.status).to.equal(200)
+							expect(res.body.message).to.equal('User has been removed.')
+							done()
+						}
+					})
+			})
 		})
 	})
 })

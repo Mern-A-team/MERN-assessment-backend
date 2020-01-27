@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 // Declare the validation function identifiers. We can't define the
 // functions themselves until we have a valid model.
@@ -41,7 +42,14 @@ const UserSchema = new mongoose.Schema({
 	},
 	role: {
 		type: String,
-		required: [true, "Please provide a user role."]
+		required: [true, 'Please provide a user role.']
+	}
+	// this pre hook ensures that updated passwords are hashed before storing.
+}).pre('findOneAndUpdate', async function() {
+	const docToUpdate = await this.model.findOne(this.getQuery())
+	if (docToUpdate.password !== this._update.password) {
+		let password = await bcrypt.hash(this._update.password, 10)
+		this._update.password = password
 	}
 })
 

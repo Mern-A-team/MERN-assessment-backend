@@ -3,6 +3,21 @@ const bcrypt = require('bcrypt')
 
 // USER CRUD FUNCTIONS!
 
+// Return user for admin dashboard
+const getUsers = (req, res) => {
+	userModel.find().then(users => {
+		let results = []
+		for (let i in users) {
+			let object = {
+				username: users[i].username,
+				role: users[i].role,
+				id: users[i]._id
+			}
+			results.push(object)
+		}
+		res.status(200).json({ users: results })
+	})
+}
 // Create a user upon registration from admin
 const createUser = (req, res) => {
 	// Destructure the username, password and role from req.body
@@ -48,13 +63,15 @@ const createUser = (req, res) => {
 }
 
 const updateUser = (req, res) => {
-	userModel.findByIdAndUpdate(
-		req.params.user_id,
+	userModel.findOneAndUpdate(
+		{ _id: req.params.user_id },
 		req.body,
-		{ new: true },
+		{ new: true, runValidators: true },
 		(err, updatedUser) => {
 			if (err) {
-				res.status(500).json('something went wrong.')
+				let path = Object.keys(err.errors)[0]
+				let message = err.errors[path].message
+				res.status(400).json(message)
 			} else {
 				res.status(200).json({ message: 'User details successfully updated!' })
 			}
@@ -62,7 +79,19 @@ const updateUser = (req, res) => {
 	)
 }
 
+const destroyUser = (req, res) => {
+	userModel.deleteOne({ _id: req.params.user_id }, err => {
+		if (err) {
+			res.status(500).json('Something went wrong')
+		} else {
+			res.status(200).json({ message: 'User has been removed.' })
+		}
+	})
+}
+
 module.exports = {
 	createUser,
-	updateUser
+	updateUser,
+	destroyUser,
+	getUsers
 }
