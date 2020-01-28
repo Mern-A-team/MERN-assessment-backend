@@ -1,18 +1,10 @@
 process.env.NODE_ENV = 'test'
 
-// server test file configuration allowing access to the chai and chai-http libraries.
-const chai = require('chai')
-const chaiHttp = require('chai-http')
+// destructuring the config variables from the config file 
+const { mongoose, chai, chaiHttp, expect, app } = require('./test-config')
 
 // Tell chai to use the chaiHttp module.
 chai.use(chaiHttp)
-
-// Pulling in our server from app
-const { app } = require('../app')
-const { mongoose } = require('../config/mongoose-connection')
-
-// destructure expect assertion from chai
-const { expect } = chai
 
 describe('Mongoose connection Tests', function() {
 	describe('test vs development database connection', function() {

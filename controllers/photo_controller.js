@@ -1,18 +1,23 @@
 const photoModel  = require("../database/schemas/photoSchema")
 
+const { authenticateUser } = require ("./usersController")
+
 // Need to ensure user validation before any crud can be implemented.
 // const userValidation = require("../controllers/authController")
 
 // Photo gallery
 // searches model for all and if no error, getPhotos will return the images
-async function getPhotos(req, res) {
+async function getPhotos(res) {
+    //finds all photo objecst from the database
     const photos = await photoModel.find()
+        //returns a server error if an error occurs
         if (err) {
             res.status(500);
             res.json({
                 error: err.message
             });
         }
+        //resolves by sending photos
         res.send(photos);
 }
 
@@ -24,8 +29,10 @@ async function addPhoto (req, res) {
     const photo = new photoModel( { name, idNumber, category, description, location, description, fileRef })
     // Saves photo to database
     await photo.save(function(err) {
+        //if no error
         if (!err) {
             res.status(201).json('Photo successfully saved!')
+            //otherwise return server error
         } else {
             res.status(500).json('Something went wrong.')
         }
@@ -35,8 +42,11 @@ async function addPhoto (req, res) {
 //Searches database for object ID and returns and renders that photo
 //deconstructs id from the params and renders the restult
 async function showPhoto(req, res) {
+    //obtains the id though the params
     let { id } = req.params
+    //identify the selected photo via photo variable
     let photo = await photoModel.findById(id)
+        //accounting for an error or not
         if (err) {
             res.status(404)
             res.send("Photo not found")
@@ -46,7 +56,7 @@ async function showPhoto(req, res) {
 }
 
 
-// Edit a photo
+// Edit a photo - this function is new to me. 
 const editPhoto = function(req, res) {
     if (req.error) {
         res.status(req.error.status)

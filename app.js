@@ -18,6 +18,7 @@ mongooseConnect(process.env.NODE_ENV)
 const PORT = process.env.PORT || 3001
 
 //  MIDDLEWARES
+
 // enables us to access json vai the req.body
 app.use(express.json())
 
