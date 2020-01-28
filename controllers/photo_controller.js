@@ -7,7 +7,7 @@ const { authenticateUser } = require ("./usersController")
 
 // Photo gallery
 // searches model for all and if no error, getPhotos will return the images
-async function getPhotos(res) {
+async function getPhotos(req, res) {
     //finds all photo objecst from the database
     const photos = await photoModel.find()
         //returns a server error if an error occurs
