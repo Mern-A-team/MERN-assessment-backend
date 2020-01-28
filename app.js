@@ -5,6 +5,7 @@ const app = express()
 const { mongooseConnect } = require('./config/mongoose-connection')
 // requiring index routes
 const routes = require('./routes/index-routes')
+const photoRouter = require('./routes/photoRoutes') 
 
 // loading environment variables in using dotenv if not in the production environment
 if (process.env.NODE_ENV !== 'production') {
@@ -24,6 +25,7 @@ app.use(express.json())
 // ROUTES
 app.use('/', routes) 
 app.use('/user', require('./routes/userRoutes'))
+app.use('/photos', photoRouter)
 
 //  SERVER LISTENING
 app.listen(PORT, () =>
