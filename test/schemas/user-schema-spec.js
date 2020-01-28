@@ -2,12 +2,8 @@
 process.env.NODE_ENV = 'test'
 // requiring the userModel form the userSchema file
 const userModel = require('../../database/schemas/userSchema')
-// server test file configuration allowing access to the chai and chai-http libraries.
-const chai = require('chai')
-// destructure expect assertion from chai
-const { expect } = chai
-// require the mongoose instance from the mongoose connect file.
-const { mongoose } = require('../../config/mongoose-connection')
+// destructuring the config variables fromt he config file
+const { mongoose, expect } = require('../test-config')
 
 // Clear all database records
 before(async function(done) {
@@ -137,8 +133,6 @@ describe('User schema Tests', function() {
 	// PASSWORD VALIDATION!!
 
 	describe('password validation', function() {
-		const bcrypt = require('bcrypt')
-
 		const noPassword = new userModel({
 			username: 'UserBob',
 			password: '',

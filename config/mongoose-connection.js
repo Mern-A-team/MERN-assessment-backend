@@ -9,7 +9,8 @@ const mongooseConnect = env => {
 		mongoose
 			.connect('mongodb://localhost/archivise-test', {
 				useNewUrlParser: true,
-				useUnifiedTopology: true
+				useUnifiedTopology: true,
+				useFindAndModify: false
 			})
 			.then(console.log('connected to the test database'))
 			.catch(error => console.log(error))

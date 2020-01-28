@@ -1,17 +1,10 @@
 process.env.NODE_ENV = 'test'
 
-// server test file configuration allowing access to the chai and chai-http libraries.
-const chai = require('chai')
-const chaiHttp = require('chai-http')
+// requiring and destructuring the config variables from the config file.
+const { chai, chaiHttp, expect, app } = require('./test-config')
 
 // Tell chai to use the chaiHttp module.
 chai.use(chaiHttp)
-
-// Pulling in our server from app
-const { app } = require('../app')
-
-// destructure expect assertion from chai
-const { expect } = chai
 
 // Our first test simply ensures that our server is connected and returns a
 // welcome message from the home api route.
