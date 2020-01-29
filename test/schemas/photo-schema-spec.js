@@ -3,11 +3,7 @@ process.env.NODE_ENV = 'test'
 const photoModel = require('../../database/schemas/photoSchema')
 
 // server test file configuration allowing access to the chai and chai-http libraries.
-// const chai = require('chai')
 const { mongoose, expect } = require('../test-config')
-// destructure expect assertion from chai
-// const { expect } = chai
-// const { mongoose } = require('../../config/mongoose-connection')
 
 before(async function(done) {
 	await mongoose.connection
@@ -157,14 +153,6 @@ describe('Photo schema tests', function() {
             })
         })
 
-        // it('should be required', function(done) {
-        //     categoryTest.validate(err => {
-        //         // expect(err).to.exist
-        //         expect(err.name).to.equal("ValidationError")
-        //         done()
-        //     })
-        // })
-
         it('should be an array', function(done) {
             categoryTest2.validate(err => {
                 console.log(err)
@@ -191,21 +179,6 @@ describe('Photo schema tests', function() {
                 done()
             })
         })
-
-        // it('should be a default of ""', function(done) {
-        //     let locationTest = new photoModel ({
-        //         name: 'Location Test',
-        //         idNumber: "mmb-255",
-        //         category: [],
-        //         location: "Location",
-        //         description: "handsome fellow on a hill",
-        //         fileRef: "fileRef"
-        //     })
-        //     locationTest.validate(err => {
-        //         expect(err.name).to.equal("ValidationError")
-        //         done()
-        //     })
-        // })
     })
 
     describe('description validation', function() {
