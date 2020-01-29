@@ -15,7 +15,7 @@ describe('Route CRUD Testing', function() {
 	// Clear all database records
 	before(function(done) {
 		mongoose.connection
-			.dropCollection('categories')
+			.dropCollection('users')
 			.catch(err => {
 				if (err) {
 					expect(err).to.exist

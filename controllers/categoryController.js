@@ -1,18 +1,56 @@
 categoryModel = require('../database/schemas/categorySchema')
 
-const createCategory = (req, res) => {
-categoryModel.create({name: req.body.name, parent: req.body.parent}, (err, category) => {
-    if(err){
-        let path = Object.keys(err.errors)[0]
-			let message = err.errors[path].message
-			res.status(400).json(message)
-    } else {
-        res.status(201).json({message: 'Category was created!'})
-    }
-})
+// CRUDS
 
+// Creating a category
+const createCategory = (req, res) => {
+	categoryModel.create(
+		{ name: req.body.name, parent: req.body.parent },
+		(err, category) => {
+			if (err) {
+				let path = Object.keys(err.errors)[0]
+				let message = err.errors[path].message
+				res.status(400).json(message)
+			} else {
+				res.status(201).json({ message: 'Category was created!' })
+			}
+		}
+	)
+}
+
+// get request for cateogories returns a json resposne with an array of category objects
+const getCategories = (req, res) => {
+	categoryModel.find((err, categories) => {
+		if (err) {
+			res
+				.send(500)
+				.json({ message: 'Internal server error something went wrong' })
+		} else if (categories.length === 0) {
+			res.status(200).json({ message: 'No content found.' })
+		} else {
+			res.status(200).json({ results: categories })
+		}
+	})
+}
+
+// put request updates category information...either name or parent.
+const updateCategory = (req, res) => {
+	categoryModel.findOneAndUpdate(
+		{ _id: req.params.category_id },
+		req.body,
+		{ new: true, runValidators: true },
+		function(err, updatedCategory) {
+			if (err || !updatedCategory) {
+				res.status(500)
+			} else {
+				res.status(200).json({ message: 'Category updated!' })
+			}
+		}
+	)
 }
 
 module.exports = {
-    createCategory
+	createCategory,
+	getCategories,
+	updateCategory
 }
