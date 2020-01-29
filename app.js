@@ -39,11 +39,13 @@ app.use(
 
 // enables us to access json vai the req.body
 app.use(express.json())
+app.use(express.urlencoded())
 
 // ROUTES
 app.use('/', routes)
 app.use('/user', require('./routes/userRoutes'))
 app.use('/photos', photoRouter)
+app.use('/categories', require('./routes/category-routes'))
 
 //  SERVER LISTENING
 app.listen(PORT, () =>
