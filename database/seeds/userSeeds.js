@@ -14,8 +14,8 @@ connect()
 
 const users = [
 	new userModel({
-		username: 'AdminUser',
-		password: 'Admin1$',
+		username: 'Admin',
+		password: '$2b$10$VtX7kzP2PmZ.mmifeWkWfOZSKuV6XBV9qOCGMsEsrWa2vTWl3TCVy',
 		role: 'admin'
 	}),
 	new userModel({

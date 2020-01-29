@@ -5,86 +5,72 @@ const chaiHttp = require('chai-http')
 
 chai.use(chaiHttp)
 
+const app = require('../../app')
 const { expect } = chai
 const { mongoose } = require('../../config/mongoose-connection')
-const { app } = require('../../app')
 const { photoModel } = require('../../database/schemas/photoSchema')
+const { createPhoto, volunteerToken } = require('../data')
 
+before(function(done) {
+    mongoose.connection
+        .dropCollection('photos')
+        .catch(err => {
+            if (err) {
+                expect(err).to.exist
+            }
+        })
+        .then(createPhoto())
+        .then(done())
+})
 
-// describe('Photo testing', () => {
-//     let testPhoto1 = {
-//         name: "Test Photo",
-//         idNumber: "mmb-897",
-//         location: "Files",
-//         category: ["people, year, 1942"],
-//         description: "Testing a test photo",
-//         fileRef: "ajsd0"
-//     }
+// describe('Photo CRUD testing', function() {
 
-//     let testPhoto2 = {
-//         name: "Second Test Photo",
-//         idNumber: "mmb-817",
-//         location: "Files",
-//         category: ["people, year, 1942"],
-//         description: "Testing another test photo",
-//         fileRef: "alk12d0"
-//     }
-//             chai 
-//                 .request(app)
-//                 .post('/photos')
-//                 .send(testPhoto1)
-//                 .end((err, res) =>{
-//                     if (err) {
-//                         done(new Error("Photo was not saved."))
-//                     } else {
-//                         console.log("Photo was saved.")
-//                         done()
-//                     }
-//                 })
-//             }
-  
-//     describe('/GET data', () => {
-//         it('should GET all "/photos"', (done) => {
-//             chai.request(app)
-//                 .get('/photos')
-//                 .end((err, res) => {
-//                     if (!err) {
-//                         expect(res).to.have.status(200)
-//                         expect(res.body.name).to.equal("Test Photo")
-//                         expect(res.body.location).to.equal("Files")
-//                         done() 
+//     it("Test route", function(done) {
+//         chai
+//             .request(app)
+//             .post('/photos')
+//             .end((err, res) =>{
+//                 if (!err) {
+//                     expect(res).to.have.status(200)
+//                     done()
 //                 } else {
 //                     done(err)
 //                 }
-//             })
 //         })
 //     })
+  
+//     describe('Create photo', function () {
+//         it('Should return a 201 if successfull', function (done) {
+//             chai
+//                 .request(app)
+//                 .post('/photos')
+//                 .set('Authorisation', `Bearer ${volunteerToken}`)
+//                 .send({
+//                     name: 'Test Passes',
+//                     idNumber: "mmb-whatever",
+//                     location: "File cabinet",
+//                     category: ["array", "of", "subjects"],
+//                     description: "Blah blah",
+//                     fileRef: "id string"
+//                 })
+//                 .end((err, res) => {
+//                     if (err) {
+//                         done(err)
+//                     } else {
+//                         expect(res).to.have.status(201)
+//                         expect(res.body).to.equal('Photo has successfully been created')
+//                     }
+//                 })
+//             })
+//         })
 
-//     // Post photo
-// describe('POST a photo', function() {
-//     it('should return a 201', function(done) {
-//         chai
-//             .request(app)
-//             .get('/photos/id')
-//             .send({
-//                 name: "Portrait of man",
-//                 idNumber: "mmb-189",
-//                 location: "drawer",
-//                 category: ["politician", "military"], 
-//                 description: "blah blah blah",
-//                 fileRef: "present"
-//             })
-//             .end(function(err, res){
-//                 expect(res).have.property('name')
-//                 expect(res).have.property('idNumber')
-//                 expect(res).have.property('category')
-//                 expect(res).have.property('location')
-//                 expect(res).have.property('description')
-//                 expect(res).have.status(200)
-//                 done()
-//             })
-//     })
+
+
 // })
+
+// if an array is [] empty, add unassigned. if adding to array and unassigned exists, remove unassigned.
+
+
 // Put photo
 // Delete photo
 
