@@ -1,6 +1,7 @@
 const { chai, chaiHttp, expect, app, mongoose } = require('../test-config')
 const { volunteerToken, adminToken } = require('../data')
 const categoryModel = require('../../database/schemas/categorySchema')
+const photoModel = require('../../database/schemas/photoSchema')
 
 chai.use(chaiHttp)
 describe('Category CRUD testing', function() {

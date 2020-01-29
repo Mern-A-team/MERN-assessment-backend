@@ -1,4 +1,13 @@
 categoryModel = require('../database/schemas/categorySchema')
+PhotoModel = require('../database/schemas/photoSchema')
+
+// Helper function for the destroyCategory function to clean up any category
+//  references in the image array.
+const categoryCleanUp = categoryId => {
+	PhotoModel.find((err, photos) => {
+		console.log(photos)
+	})
+}
 
 // CRUDS
 
@@ -48,13 +57,14 @@ const updateCategory = (req, res) => {
 		}
 	)
 }
-
+// Deleting a category
 const destroyCategory = (req, res) => {
 	categoryModel.deleteOne({ _id: req.params.category_id }, err => {
 		if (err) {
 			res.status(500).json('Something went wrong')
 		} else {
 			res.status(200).json({ message: 'Category deleted!' })
+			categoryCleanUp(req.params.category_id)
 		}
 	})
 }

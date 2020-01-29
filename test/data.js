@@ -2,6 +2,8 @@ const { chai, chaiHttp} = require('./test-config')
 const JWT = require('../servicesHelpers/JWTgenerator')
 const userModel = require('../database/schemas/userSchema')
 
+// A drunk draw of data and helpers for the test file.
+
 chai.use(chaiHttp)
 
 let user = {
