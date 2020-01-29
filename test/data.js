@@ -36,27 +36,19 @@ const createUser = () => {
 }
 
 let testPhoto1 = new photoModel ({
-	name: "Test Photo",
+	name: "testPhoto1",
 	idNumber: "mmb-897",
 	location: "Files",
 	category: ["people, year, 1942"],
 	description: "Testing a test photo",
 	fileRef: "ajsd0"
 })
-let testPhoto2 = new photoModel ({
-	name: "Second Test Photo",
-	idNumber: "mmb-817",
-	location: "Files",
-	category: ["people, year, 1942"],
-	description: "Testing another test photo",
-	fileRef: "alk12d0"
-})
 
 const createPhoto = () => {
 	testPhoto1.save((err, res) => {
 		if (!err){
 			console.log('photo saved!')
-		} 
+		}
 	})
 }
 

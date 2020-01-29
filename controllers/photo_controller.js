@@ -22,13 +22,13 @@ async function getPhotos(req, res) {
 }
 
 // Create
-async function addPhoto (req, res) {
+const addPhoto = (req, res) => {
     // Destructures elements of a photo from req.body
     const { name, idNumber, location, category, description, fileRef } = req.body
     // Creates a new photo item with destructured parameters
     const photo = new photoModel( { name, idNumber, category, description, location, description, fileRef })
     // Saves photo to database
-    await photo.save(function(err) {
+    photo.save(function(err) {
         //if no error
         if (!err) {
             res.status(201).json('Photo successfully saved!')

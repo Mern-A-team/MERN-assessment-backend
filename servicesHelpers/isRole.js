@@ -7,6 +7,13 @@ const isAdmin = (req, res) => {
 	return payload.role === 'admin' ? true : false
 }
 
+const isVolunteer = (req, res) => {
+	let token = splitToken(req.headers.authorization)
+	let payload = JWT.decode(token)
+	return payload.role === 'volunteer' ? true : false
+}
+
 module.exports = {
-    isAdmin
+	isAdmin,
+	isVolunteer
 }
