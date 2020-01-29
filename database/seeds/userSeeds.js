@@ -15,17 +15,20 @@ connect()
 const users = [
 	new userModel({
 		username: 'AdminUser',
-		password: 'Admin1$',
+		// password is Admin1$
+		password: '$2a$10$Ggf93IpAzSbCoO2ZhbmmzetGtdheN9pExKEeOdjphBMFikStrD8cq',
 		role: 'admin'
 	}),
 	new userModel({
 		username: 'VolunteerUser',
-		password: 'Volunteer1$',
+		// Password Volunteer1$
+		password: '$2a$10$9FVNlGcupIpNOTrRajQVFuG57oBhgwtMqREZKy1Q3bpUx9ZqjVhUC',
 		role: 'volunteer'
 	}),
 	new userModel({
 		username: 'GuestUser',
-		password: 'Guest1$',
+		// Password Guest1$
+		password: '$2a$10$gJ9m5H4ut5ZWnxwubrl6u.U8yEFnQmEPDE/HBzWscNc/6JWKgp9gq',
 		role: 'guest'
 	})
 ]
