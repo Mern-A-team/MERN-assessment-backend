@@ -3,6 +3,8 @@ PhotoModel = require('../database/schemas/photoSchema')
 
 // Helper function for the destroyCategory function to clean up any category
 //  references in the image array.
+
+// FINISH ME!!
 const categoryCleanUp = categoryId => {
 	PhotoModel.find((err, photos) => {
 		console.log(photos)
