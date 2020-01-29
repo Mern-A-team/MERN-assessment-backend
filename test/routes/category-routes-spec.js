@@ -131,9 +131,7 @@ describe('Category CRUD testing', function() {
 							})
 							.end((err, res) => {
 								if (res.status === 200) {
-									categoryModel.find({ name: 'Updated!!' }, (err, cat) => {
-										console.log(cat)
-									})
+									categoryModel.find({ name: 'Updated!!' }, (err, cat) => {})
 									expect(res.body.message).to.equal('Category updated!')
 									done()
 								} else if (err) {
@@ -152,8 +150,65 @@ describe('Category CRUD testing', function() {
 		})
 	})
 	describe('Destroy category', function() {
-		it('Should delete the category')
-		it('Should return a 401 unauthorized if not admin')
+		it('Should delete the category', function(done) {
+			categoryModel.create(
+				{ name: 'DeleteCategory', parent: 'All' },
+				(err, category) => {
+					if (err) {
+						done(err)
+					} else {
+						chai
+							.request(app)
+							.delete(`/categories/${category._id}`)
+							.set('Authorization', `Bearer ${adminToken}`)
+							.end((err, res) => {
+								if (err) {
+									done(err)
+								} else {
+									expect(res.status).to.equal(200)
+									expect(res.body.message).to.equal('Category deleted!')
+									done()
+								}
+							})
+					}
+				}
+			)
+		})
+		it('Should return a 401 unauthorized if not admin', function(done) {
+			categoryModel.create(
+				{ name: 'DontDeleteCategory', parent: 'All' },
+				(err, category) => {
+					if (err) {
+						done(err)
+					} else {
+						chai
+							.request(app)
+							.delete(`/categories/${category._id}`)
+							.set('Authorization', `Bearer ${volunteerToken}`)
+							.end((err, res) => {
+								if (err) {
+									done(err)
+								} else {
+									categoryModel.findOne(
+										{ name: 'DontDeleteCategory' },
+										(err, category) => {
+											if (err) {
+												done(err)
+											}
+											expect(category).to.exist
+											expect(res.status).to.equal(401)
+											expect(res.body.errorMessage).to.equal(
+												'Permission denied. Admin task only!'
+											)
+											done()
+										}
+									)
+								}
+							})
+					}
+				}
+			)
+		})
 		it('Should delete the category id from all image arrays')
 		it('Should assign default un-assigned to an empty array')
 	})

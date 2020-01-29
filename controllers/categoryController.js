@@ -49,8 +49,19 @@ const updateCategory = (req, res) => {
 	)
 }
 
+const destroyCategory = (req, res) => {
+	categoryModel.deleteOne({ _id: req.params.category_id }, err => {
+		if (err) {
+			res.status(500).json('Something went wrong')
+		} else {
+			res.status(200).json({ message: 'Category deleted!' })
+		}
+	})
+}
+
 module.exports = {
 	createCategory,
 	getCategories,
-	updateCategory
+	updateCategory,
+	destroyCategory
 }
