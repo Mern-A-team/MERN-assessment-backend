@@ -61,9 +61,10 @@ const editPhoto = (req, res) => {
     photoModel.findOneAndUpdate(
         { _id: req.params.photo_id },
         req.body,
-        (err, updatedPhoto) => {
+        { new: true, runValidators: true},
+        (err, editedPhoto) => {
             if (err) {
-                res.status(400).json(message)
+                res.status(401).json(message)
             } else {
                 res.status(200).json({ message: 'Photo details successfully updated!' })
             }

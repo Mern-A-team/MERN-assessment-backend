@@ -138,6 +138,7 @@ describe('Photo CRUD testing', function() {
             })
         })
     })
+
     describe("Edit done by an Admin",  function() {
         it('should update the details of a photo', function(done) {
             photoModel
@@ -167,35 +168,62 @@ describe('Photo CRUD testing', function() {
             })
         })
     })
-    // describe("Edit attempted by guest", function() {
-    //     it('should throw error when a guest tries to edit photo', function(done) {
-    //         photoModel
-    //             .findOne({ name: 'testPhoto1' })
-    //             .then(photo => {
-    //         chai
-    //             .request(app)
-    //             .put(`/photos/${photo._id}`)
-    //             .set('Authorization', null)
-    //             .send({
-    //                 name: 'Test Passes',
-    //                 idNumber: "mmb-22",
-    //                 location: "File cabinet",
-    //                 category: ["array", "of", "subjects"],
-    //                 description: "Blah blah",
-    //                 fileRef: "id string"
-    //             })
-    //             .end((err, res) => {
-    //                 if(err) {
-    //                     done(err)
-    //                 } else {
-    //                     expect(res.status).to.equal(401)
-    //                     expect(res.body.message).to.equal('Permission denied. You do not have authorisation to perform this task!')
-    //                     done()
-    //                 }
-    //             })
-    //         })
-    //     })
-    // })
+    describe("Edit attempted by guest", function() {
+        it('should return a 401 when a guest tries to edit photo', function(done) {
+            photoModel
+                .findOne({ name: 'Test Passes' })
+                .then(photo => {
+            chai
+                .request(app)
+                .put(`/photos/${photo._id}`)
+                .set('Authorization', null)
+                .send({
+                    name: 'Test Passes',
+                    idNumber: "mmb-22",
+                    location: "File cabinet",
+                    category: ["array", "of", "subjects"],
+                    description: "Blah blah",
+                    fileRef: "id string"
+                })
+                .end((err, res) => {
+                    if(err) {
+                        done(err)
+                    } else {
+                        expect(res.status).to.equal(401)
+                        expect(res.body.message).to.equal('Permission denied. You do not have authorisation to perform this task!')
+                        done()
+                    }
+                })
+            })
+        })
+    })
+
+    describe("Returns a photo by ID", function() {
+        it('Should return a photo with an id', function(done) {
+            const newPhoto = new photoModel({
+                name: 'New photo 1',
+                idNumber: "mmb-111",
+                location: "File cabinet",
+                category: ["array", "of", "subjects"],
+                description: "Blah blah",
+                fileRef: "id string"
+            })
+            console.log(newPhoto)
+            newPhoto.save((err, photo) => {
+                chai
+                    .request(app)
+                    .get('/photos/' + photo._id)
+                    .send(photo)
+                    .end((err, res) => {
+                        expect(res.status).to.equal(200)
+                        expect(res.body).to.have.property('name')
+                        expect(res.body).to.have.property('idNumber')
+                        done()
+                    })
+                })
+        })
+    })
+
 })
 
 
