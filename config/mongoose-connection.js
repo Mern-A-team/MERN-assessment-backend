@@ -28,7 +28,9 @@ const mongooseConnect = env => {
 			.catch(error => console.log(error))
 	} else {
 		mongoose
-			.connect('mongodb://localhost/archivise', {
+		//USE BELOW STRING FOR LIVE DATABASE
+		//mongodb+srv://cademo:cademo@cluster0-v0web.mongodb.net/test?retryWrites=true&w=majority
+			.connect(process.env.DEP_DB, {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
 			})

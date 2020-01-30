@@ -28,8 +28,8 @@ const PhotoSchema = new Schema(
         default: ""
     },
     category: {
-        type: Array,
-        required: true,
+        type: [],
+        required: true
     },
     description: {
         type: String,
