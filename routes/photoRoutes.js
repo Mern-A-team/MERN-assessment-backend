@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 // const PhotoController = require("../controllers/book_controller");
-const { getPhotos, addPhoto, showPhoto, editPhoto, deletePhoto } = require("../controllers/photo_controller");
-const { isAdmin, isVolunter } = require('../servicesHelpers/isRole')
+const { getPhotos, addPhoto, showPhoto, editPhoto, deletePhoto } = require("../controllers/photoController");
+const { isAdmin, isVolunteer } = require('../servicesHelpers/isRole')
 
 // router.use(userAuthenticated)
 const noAuth = (req, res) => {
@@ -19,20 +19,24 @@ router.get('/test', (req, res) => {
 //READ getPhotos
 router.get("/",  getPhotos)
 
-router.get("/search", function(req, res, next) {res.send("GET request for search function") })
 
+// CREATE addPhoto
+router.post('/addPhoto', (req, res)  => {
+   (isAdmin(req, res) || isVolunteer(req, res)) ? addPhoto(req, res) : noAuth(req, res)
+})
 
-// CREATE via addPhoto
-// router.get("/addPhoto", function(req, res) { res.json({ "message": "GET request for adding a photo" }) })
-router.post('/addPhoto', (req, res)  => { 
-   (isAdmin(req, res) || isVolunter(req, res)) ? addPhoto(req, res) : noAuth(req, res)
+//EDIT editPhoto
+router.put('/:photo_id', (req, res) => {
+    (isAdmin(req, res) || isVolunteer(req, res)) ? editPhoto(req, res) : noAuth(req, res)
 })
 
 //SHOW showPhoto
-router.put('/:photo_id', function(req, res) {res.send("GET request for show page") })
+router.get('/:photo_id', showPhoto)
 
-//UPDATE or DELETE editPhoto, deletePhoto
-router.post('/:photo_id', function(req, res) { res.send("POST for editing photo") })
+//DELETE deletePhoto
+router.delete('/:photo_id', (req, res) => {
+    isAdmin(req, res) ? deletePhoto(req, res) : noAuth(req, res)
+})
 
 
 

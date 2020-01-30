@@ -11,12 +11,12 @@ async function getPhotos(req, res) {
     //finds all photo objecst from the database
     const photos = await photoModel.find()
         //returns a server error if an error occurs
-        if (err) {
-            res.status(500);
-            res.json({
-                error: err.message
-            });
-        }
+        // if (err) {
+        //     res.status(500);
+        //     res.json({
+        //         error: err.message
+        //     });
+        // }
         //resolves by sending photos
         res.send(photos);
 }
@@ -30,22 +30,22 @@ const addPhoto = (req, res) => {
     // Saves photo to database
     photo.save(function(err) {
         //if no error
-        if (!err) {
-            res.status(201).json('Photo successfully saved!')
+        if (err) {
+            res.status(500).json('Something went wrong.')
             //otherwise return server error
         } else {
-            res.status(500).json('Something went wrong.')
+            res.status(201).json('Photo successfully saved!')
         }
     })
 }
 
 //Searches database for object ID and returns and renders that photo
 //deconstructs id from the params and renders the restult
-async function showPhoto(req, res) {
+const showPhoto = (req, res) => {
     //obtains the id though the params
     let { id } = req.params
     //identify the selected photo via photo variable
-    let photo = await photoModel.findById(id)
+    let photo = photoModel.findById(id)
         //accounting for an error or not
         if (err) {
             res.status(404)
@@ -56,32 +56,34 @@ async function showPhoto(req, res) {
 }
 
 
-// Edit a photo - this function is new to me. 
-const editPhoto = function(req, res) {
-    if (req.error) {
-        res.status(req.error.status)
-        res.send(req.error.message)
-    } else {
-        updatePhoto(req).exec((err, photo) => {
+// Edit a photo - this function is new to me.
+const editPhoto = (req, res) => {
+    photoModel.findOneAndUpdate(
+        { _id: req.params.photo_id },
+        req.body,
+        (err, updatedPhoto) => {
             if (err) {
-                res.status(500)
-                res.json({
-                    error: err.message
-                })
+                res.status(400).json(message)
+            } else {
+                res.status(200).json({ message: 'Photo details successfully updated!' })
             }
-            res.status(200)
-            res.send(photo)
-        })
-    }
+        }
+    )
 }
 
 //Deleting a photo by looking for the id. Sends through the status 204 (No content)
 //if successful and 500 (server error) if an error.
-deletePhoto = async (req, res) => {
-    await Photo.findByIdAndDelete(req.body.id)
-    .then(res.sendStatus(204))
-    .catch(res.status(500))
+
+const deletePhoto = (req, res) => {
+    Photo.findByIdAndDelete({_id: req.params.photo_id}, err => {
+        if (err) {
+            res.status(500).json('Something went wrong')
+        } else {
+            res.status(200).json({ message: 'Photo has been deleted' })
+        }
+    })
 }
+
 
 //ANOTHER delete option, but makes less sense to me personally
 // const deletePhoto = function(req, res) {
