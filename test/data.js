@@ -18,8 +18,16 @@ let volunteerUser = {
 	role: 'volunteer',
 	_id: 'dfgh28723bvcds987'
 }
+let guestUser = {
+	username: 'GuestUser',
+	password: 'Volly1$',
+	role: 'guest',
+	_id: 'dfgh28723bvcds987'
+}
+
 let adminToken = JWT.generateToken(user)
 let volunteerToken = JWT.generateToken(volunteerUser)
+let guestToken = JWT.generateToken(guestUser)
 
 let EditUser = new userModel({
 	username: 'EditUser',
@@ -59,6 +67,7 @@ const createPhoto = () => {
 module.exports = {
 	adminToken,
 	volunteerToken,
+	guestToken,
 	createUser,
 	createPhoto
 }

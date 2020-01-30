@@ -14,6 +14,18 @@ const mongooseConnect = env => {
 			})
 			.then(console.log('connected to the test database'))
 			.catch(error => console.log(error))
+	} else if (env === 'production') {
+		mongoose
+			.connect(
+				'mongodb+srv://cademo:cademo@cluster0-v0web.mongodb.net/test?retryWrites=true&w=majority',
+				{
+					useNewUrlParser: true,
+					useUnifiedTopology: true,
+					useFindAndModify: false
+				}
+			)
+			.then(console.log('connected to archivise live!'))
+			.catch(error => console.log(error))
 	} else {
 		mongoose
 		//USE BELOW STRING FOR LIVE DATABASE

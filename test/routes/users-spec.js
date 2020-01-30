@@ -48,8 +48,8 @@ describe('Route CRUD Testing', function() {
 				.post('/user')
 				.set('Authorization', `Bearer ${adminToken}`)
 				.send({
-					username: 'TestChicken',
-					password: 'Llama1$',
+					username: 'admin',
+					password: 'admin1$',
 					role: 'admin'
 				})
 				.end((err, res) => {

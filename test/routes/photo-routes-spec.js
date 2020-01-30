@@ -8,7 +8,7 @@ chai.use(chaiHttp)
 // const { expect } = chai
 // const { mongoose } = require('../../config/mongoose-connection')
 const photoModel = require('../../database/schemas/photoSchema')
-const { createPhoto, volunteerToken, adminToken } = require('../data')
+const { createPhoto, volunteerToken, adminToken, guestToken } = require('../data')
 
 describe('Photo CRUD testing', function() {
 
@@ -70,8 +70,10 @@ describe('Photo CRUD testing', function() {
                     })
                     .end((err, res) => {
                         if (err) {
+                            console.log(err)
                             done(err)
                         } else {
+                            console.log(res)
                             expect(res).to.have.status(201)
                             expect(res.body).to.equal('Photo successfully saved!')
                             done()
@@ -79,149 +81,148 @@ describe('Photo CRUD testing', function() {
                     })
             })
         })
-        describe('Add a photo by Admin', function() {
-            it ('should return a 201 if successful', function(done) {
-                chai
-                    .request(app)
-                    .post('/photos/addPhoto')
-                    .set('Authorization', `Bearer ${adminToken}`)
-                    .send({
-                        name: 'Test Passes',
-                        idNumber: "mmb-something",
-                        location: "File cabinet",
-                        category: ["array", "of", "subjects"],
-                        description: "Blah blah",
-                        fileRef: "id string"
-                    })
-                    .end((err, res) => {
-                        if (err) {
-                            done(err)
-                        } else {
-                            expect(res).to.have.status(201)
-                            expect(res.body).to.equal('Photo successfully saved!')
-                            done()
-                        }
-                    })
-                })
+    //     describe('Add a photo by Admin', function() {
+    //         it ('should return a 201 if successful', function(done) {
+    //             chai
+    //                 .request(app)
+    //                 .post('/photos/addPhoto')
+    //                 .set('Authorization', `Bearer ${adminToken}`)
+    //                 .send({
+    //                     name: 'Test Passes',
+    //                     idNumber: "mmb-something",
+    //                     location: "File cabinet",
+    //                     category: ["array", "of", "subjects"],
+    //                     description: "Blah blah",
+    //                     fileRef: "id string"
+    //                 })
+    //                 .end((err, res) => {
+    //                     if (err) {
+    //                         done(err)
+    //                     } else {
+    //                         expect(res).to.have.status(201)
+    //                         expect(res.body).to.equal('Photo successfully saved!')
+    //                         done()
+    //                     }
+    //                 })
+    //             })
 
-        })
-    })
+    //     })
+    // })
 
-    describe ('Editing a Photo', function() {
-        describe('Edit done by a volunteer', function() {
-            it('should update the details of a photo', function(done) {
-                photoModel
-                    .findOne({ name: 'testPhoto1' })
-                    .then(photo => {
-                chai
-                    .request(app)
-                    .put(`/photos/${photo._id}`)
-                    .set('Authorization', `Bearer ${volunteerToken}`)
-                    .send({
-                        name: 'Test Passes',
-                        idNumber: "mmb-29837",
-                        location: "File cabinet",
-                        category: ["array", "of", "subjects"],
-                        description: "Blah blah",
-                        fileRef: "id string"
-                    })
-                    .end((err, res) => {
-                        if(err) {
-                            done(err)
-                        } else {
-                            expect(res.status).to.equal(200)
-                            expect(res.body.message).to.equal('Photo details successfully updated!')
-                            done()
-                        }
-                    })
-                })
-            })
-        })
-    })
+    // describe ('Editing a Photo', function() {
+    //     describe('Edit done by a volunteer', function() {
+    //         it('should update the details of a photo', function(done) {
+    //             photoModel
+    //                 .findOne({ name: 'testPhoto1' })
+    //                 .then(photo => {
+    //             chai
+    //                 .request(app)
+    //                 .put(`/photos/${photo._id}`)
+    //                 .set('Authorization', `Bearer ${volunteerToken}`)
+    //                 .send({
+    //                     name: 'Test Passes',
+    //                     idNumber: "mmb-29837",
+    //                     location: "File cabinet",
+    //                     category: ["array", "of", "subjects"],
+    //                     description: "Blah blah",
+    //                     fileRef: "id string"
+    //                 })
+    //                 .end((err, res) => {
+    //                     if(err) {
+    //                         done(err)
+    //                     } else {
+    //                         expect(res.status).to.equal(200)
+    //                         expect(res.body.message).to.equal('Photo details successfully updated!')
+    //                         done()
+    //                     }
+    //                 })
+    //             })
+    //         })
+    //     })
+    // })
 
-    describe("Edit done by an Admin",  function() {
-        it('should update the details of a photo', function(done) {
-            photoModel
-                .find()
-                .then(photos => {
-            chai
-                .request(app)
-                .put(`/photos/${photos[0]._id}`)
-                .set('Authorization', `Bearer ${adminToken}`)
-                .send({
-                    name: 'Test Passes',
-                    idNumber: "mmb-222222",
-                    location: "File cabinet",
-                    category: ["array", "of", "subjects"],
-                    description: "Blah blah",
-                    fileRef: "id string"
-                })
-                .end((err, res) => {
-                    if(err) {
-                        done(err)
-                    } else {
-                        expect(res.status).to.equal(200)
-                        expect(res.body.message).to.equal('Photo details successfully updated!')
-                        done()
-                    }
-                })
-            })
-        })
-    })
-    describe("Edit attempted by guest", function() {
-        it('should return a 401 when a guest tries to edit photo', function(done) {
-            photoModel
-                .findOne({ name: 'Test Passes' })
-                .then(photo => {
-            chai
-                .request(app)
-                .put(`/photos/${photo._id}`)
-                .set('Authorization', null)
-                .send({
-                    name: 'Test Passes',
-                    idNumber: "mmb-22",
-                    location: "File cabinet",
-                    category: ["array", "of", "subjects"],
-                    description: "Blah blah",
-                    fileRef: "id string"
-                })
-                .end((err, res) => {
-                    if(err) {
-                        done(err)
-                    } else {
-                        expect(res.status).to.equal(401)
-                        expect(res.body.message).to.equal('Permission denied. You do not have authorisation to perform this task!')
-                        done()
-                    }
-                })
-            })
-        })
-    })
+    // describe("Edit done by an Admin",  function() {
+    //     it('should update the details of a photo', function(done) {
+    //         photoModel
+    //             .find()
+    //             .then(photos => {
+    //         chai
+    //             .request(app)
+    //             .put(`/photos/${photos[0]._id}`)
+    //             .set('Authorization', `Bearer ${adminToken}`)
+    //             .send({
+    //                 name: 'Test Passes',
+    //                 idNumber: "mmb-222222",
+    //                 location: "File cabinet",
+    //                 category: ["array", "of", "subjects"],
+    //                 description: "Blah blah",
+    //                 fileRef: "id string"
+    //             })
+    //             .end((err, res) => {
+    //                 if(err) {
+    //                     done(err)
+    //                 } else {
+    //                     expect(res.status).to.equal(200)
+    //                     expect(res.body.message).to.equal('Photo details successfully updated!')
+    //                     done()
+    //                 }
+    //             })
+    //         })
+    //     })
+    // })
+    // describe("Edit attempted by guest", function() {
+    //     it('should return a 401 when a guest tries to edit photo', function(done) {
+    //         photoModel
+    //             .findOne({ name: 'Test Passes' })
+    //             .then(photo => {
+    //         chai
+    //             .request(app)
+    //             .put(`/photos/${photo._id}`)
+    //             .set('Authorization', null)
+    //             .send({
+    //                 name: 'Test Passes',
+    //                 idNumber: "mmb-22",
+    //                 location: "File cabinet",
+    //                 category: ["array", "of", "subjects"],
+    //                 description: "Blah blah",
+    //                 fileRef: "id string"
+    //             })
+    //             .end((err, res) => {
+    //                 if(err) {
+    //                     done(err)
+    //                 } else {
+    //                     expect(res.status).to.equal(401)
+    //                     expect(res.body.message).to.equal('Permission denied. You do not have authorisation to perform this task!')
+    //                     done()
+    //                 }
+    //             })
+    //         })
+    //     })
+    // })
 
-    describe("Returns a photo by ID", function() {
-        it('Should return a photo with an id', function(done) {
-            const newPhoto = new photoModel({
-                name: 'New photo 1',
-                idNumber: "mmb-111",
-                location: "File cabinet",
-                category: ["array", "of", "subjects"],
-                description: "Blah blah",
-                fileRef: "id string"
-            })
-            console.log(newPhoto)
-            newPhoto.save((err, photo) => {
-                chai
-                    .request(app)
-                    .get('/photos/' + photo._id)
-                    .send(photo)
-                    .end((err, res) => {
-                        expect(res.status).to.equal(200)
-                        expect(res.body).to.have.property('name')
-                        expect(res.body).to.have.property('idNumber')
-                        done()
-                    })
-                })
-        })
+    // describe("Returns a photo by ID", function() {
+    //     it('Should return a photo with an id', function(done) {
+    //         const newPhoto = new photoModel({
+    //             name: 'New photo 1',
+    //             idNumber: "mmb-111",
+    //             location: "File cabinet",
+    //             category: ["array", "of", "subjects"],
+    //             description: "Blah blah",
+    //             fileRef: "id string"
+    //         })
+    //         newPhoto.save((err, photo) => {
+    //             chai
+    //                 .request(app)
+    //                 .get('/photos/' + photo._id)
+    //                 .send(photo)
+    //                 .end((err, res) => {
+    //                     expect(res.status).to.equal(200)
+    //                     expect(res.body).to.have.property('name')
+    //                     expect(res.body).to.have.property('idNumber')
+    //                     done()
+    //                 })
+    //             })
+    //     })
     })
 
 })
@@ -235,4 +236,3 @@ describe('Photo CRUD testing', function() {
 // Delete photo
 
 // module.exports = Router
-

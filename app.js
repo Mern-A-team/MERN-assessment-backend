@@ -5,7 +5,8 @@ const app = express()
 const { mongooseConnect } = require('./config/mongoose-connection')
 // requiring index routes
 const routes = require('./routes/index-routes')
-const photoRouter = require('./routes/photoRoutes') 
+const photoRouter = require('./routes/photoRoutes')
+const cors = require('cors')
 
 // loading environment variables in using dotenv if not in the production environment
 if (process.env.NODE_ENV !== 'production') {
@@ -18,14 +19,33 @@ mongooseConnect(process.env.NODE_ENV)
 const PORT = process.env.PORT || 3001
 
 //  MIDDLEWARES
+const allowedOrigins = [process.env.DEV_CORS, process.env.DEP_CORS]
+
+
+app.use(
+	cors({
+		origin: function(origin, callback) {
+			if (!origin) return callback(null, true)
+
+			if (allowedOrigins.indexOf(origin) === -1) {
+				var msg =
+					'The CORS policy for this site does not' +
+					'allow access from the specified Origin.'
+				return callback(null, true)
+			}
+		}
+	})
+)
 
 // enables us to access json vai the req.body
 app.use(express.json())
+app.use(express.urlencoded())
 
 // ROUTES
-app.use('/', routes) 
+app.use('/', routes)
 app.use('/user', require('./routes/userRoutes'))
 app.use('/photos', photoRouter)
+app.use('/categories', require('./routes/category-routes'))
 
 //  SERVER LISTENING
 app.listen(PORT, () =>
