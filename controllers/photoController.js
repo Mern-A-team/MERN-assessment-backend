@@ -44,7 +44,7 @@ const showPhoto = (req, res) => {
 }
 
 
-// Edit a photo - this function is new to me.
+// Edit a photo - Specifically checks the Category field to assist with searches.
 const editPhoto = (req, res) => {
     photoModel.findOneAndUpdate(
         { _id: req.params.photo_id },
@@ -52,9 +52,35 @@ const editPhoto = (req, res) => {
         { new: true, runValidators: true},
         (err, editedPhoto) => {
             if (err) {
-                res.status(401).send(message)
+                res.status(500).send(err)
             } else {
+                //Look for category array. If length is 0, push "unassigned"
+                //If category contains "unassigned" && length > 1, remove "unassigned"
+
+                let categories = req.body.category
+                console.log(categories.length)
+                console.log(categories)
+                categories = categories.filter(cat => cat !== 'unassigned')
+                if (categories.length === 0) {
+                    categories.push('unassigned')
+                }
+                    console.log(categories)
+                // } else if ((categories.length > 1) && (categories.includes('unassigned'))) {
+                // // DONT DELETE FROM WITHIN A LOOP- create a new array and reassign it at the end.
+                // console.log('Wine wine wine')
+                // categories = categories.filter(cat => cat !== 'unassigned')
+                // // let tempArr = []
+                // //     for ( let i = 0; i < categories.length; i++ ) {
+                // //             if ( categories[i] !== 'unassigned') {
+                // //                 tempArr.push(categories[i]);
+                // //                 console.log(tempArr)
+                // //             }
+                // //     categories = tempArr
+                //     console.log(categories)
+                // } else {
+                // console.log(categories)
                 res.status(200).json({ message: 'Photo details successfully updated!' })
+                // }
             }
         }
     )
@@ -72,23 +98,6 @@ const deletePhoto = (req, res) => {
         }
     })
 }
-
-
-//ANOTHER delete option, but makes less sense to me personally
-// const deletePhoto = function(req, res) {
-//     if (req.error) {
-//         res.status(req.error.status)
-//         res.send(req.error.message)
-//     } else {
-//         deletePhotoObject(req.params.id).exec((err) => {
-//             if (err) {
-//                 res.status(500)
-//                 res.json({ error: err.message })
-//             }
-//             res.sendStatus(204)
-//         })
-//     }
-// }
 
 // exporting the modules
 module.exports = {

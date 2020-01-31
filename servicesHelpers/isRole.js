@@ -16,20 +16,9 @@ const isAdmin = (req, res, next) => {
 	}
 }
 
-// const isVolunteer = (req, res) => {
-// 	let token = splitToken(req.headers.authorization)
-// 	if (token) {
-// 		let payload = JWT.decode(token)
-// 		if (payload.role === 'volunteer') {
-// 			done()
-// 		} else {
-// 			res.status(401).json({errorMessage: 'Permission denied. You are not authorised for this task!'})
-// 		}
-// 	} else {
-// 		res.status(401).json({ errorMessage: 'No token sent' })
-// 	}
-// }
-
+//Checks to see if role is volunteer or admin- used for adding photos and editing photos.
+//Gets token, splits the token to determine if it contains the role of admin or volunteer. 
+//If the roles match, 
 const isAdminOrVolunteer = (req, res, next) => {
 	let token = splitToken(req.headers.authorization)
 	if (token) {
