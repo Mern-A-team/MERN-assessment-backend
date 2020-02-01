@@ -4,9 +4,6 @@ const { mongoose, chai, chaiHttp, expect, app } = require('../test-config')
 
 chai.use(chaiHttp)
 
-// const app = require('../../app')
-// const { expect } = chai
-// const { mongoose } = require('../../config/mongoose-connection')
 const photoModel = require('../../database/schemas/photoSchema')
 const { createPhoto, volunteerToken, adminToken } = require('../data')
 
@@ -235,8 +232,3 @@ describe('Photo CRUD testing', function() {
 
 // if an array is [] empty, add unassigned. if adding to array and unassigned exists, remove unassigned.
 
-
-// Put photo
-// Delete photo
-
-// module.exports = Router

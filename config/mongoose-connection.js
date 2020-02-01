@@ -30,7 +30,7 @@ const mongooseConnect = env => {
 		mongoose
 		//USE BELOW STRING FOR LIVE DATABASE
 		//mongodb+srv://cademo:cademo@cluster0-v0web.mongodb.net/test?retryWrites=true&w=majority
-			.connect(process.env.DEP_DB, {
+			.connect('mongodb://localhost/archivise', {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
 			})
