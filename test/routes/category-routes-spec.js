@@ -210,7 +210,5 @@ describe('Category CRUD testing', function() {
 				}
 			)
 		})
-		it('Should delete the category id from all image arrays')
-		it('Should assign default un-assigned to an empty array')
 	})
 })

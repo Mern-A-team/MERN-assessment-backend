@@ -8,6 +8,21 @@ PhotoModel = require('../database/schemas/photoSchema')
 const categoryCleanUp = categoryId => {
 	PhotoModel.find((err, photos) => {
 		console.log(photos)
+		for (let x in photos) {
+			let categoryIndex = photos[x].category.findIndex(
+				element => element === categoryId
+			)
+			if (categoryIndex !== -1) {
+				let newArray = photos[x].category.splice(categoryIndex, 1)
+				photos[x].update(
+					{ category: newArray },
+					{ new: true },
+					(err, result) => {
+						console.log(photos[x])
+					}
+				)
+			}
+		}
 	})
 }
 
@@ -75,5 +90,7 @@ module.exports = {
 	createCategory,
 	getCategories,
 	updateCategory,
-	destroyCategory
+	destroyCategory,
+	// exporting for testing
+	categoryCleanUp
 }
