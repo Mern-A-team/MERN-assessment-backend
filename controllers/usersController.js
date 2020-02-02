@@ -3,6 +3,20 @@ const bcrypt = require('bcrypt')
 
 // USER CRUD FUNCTIONS!
 
+// Get a single user
+const getUser = (req, res) => {
+	userModel.findOne({ _id: req.params.user_id }, (err, user) => {
+		if(err){
+			res.status(500).send('Something went wrong.')
+		}
+		if (!user) {
+			res.status(200).json({ message: 'No user found.' })
+		} else {
+			res.status(200).json({ user })
+		}
+	})
+}
+
 // Return user for admin dashboard
 const getUsers = (req, res) => {
 	userModel.find().then(users => {
@@ -93,5 +107,6 @@ module.exports = {
 	createUser,
 	updateUser,
 	destroyUser,
-	getUsers
+	getUsers,
+	getUser
 }

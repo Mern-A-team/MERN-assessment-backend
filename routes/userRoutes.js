@@ -11,6 +11,7 @@ router.get('/test', (req, res) => {
 	res.json({ message: 'User route test Success' })
 })
 router.get('/', isAdmin, usersController.getUsers)
+router.get('/:user_id', usersController.getUser)
 router.post('/', isAdmin, usersController.createUser)
 router.put('/:user_id', isAdmin, usersController.updateUser)
 router.delete('/:user_id', isAdmin, usersController.destroyUser)
