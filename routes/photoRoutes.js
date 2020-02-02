@@ -23,7 +23,7 @@ router.get("/",  getPhotos)
 router.post('/addPhoto', isAdminOrVolunteer, addPhoto)
 
 //EDIT editPhoto
-router.put('/:photo_id', isAdminOrVolunteer, editPhoto)
+router.patch('/:photo_id', isAdminOrVolunteer, editPhoto)
 
 //SHOW showPhoto
 router.get('/:photo_id', showPhoto)
