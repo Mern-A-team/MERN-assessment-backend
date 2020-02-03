@@ -14,7 +14,9 @@ const categoryCleanUp = category => {
 				let newArray = photos[x].category.filter((value, index) => {
 					return index !== categoryIndex
 				})
-				console.log(newArray)
+				if(newArray.length === 0){
+					newArray.push('unassigned')
+				}
 				photos[x].update({ category: newArray }, (err, done) => {
 					return done
 				})
