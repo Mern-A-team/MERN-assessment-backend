@@ -3,6 +3,7 @@ const router = express.Router();
 // const PhotoController = require("../controllers/book_controller");
 const { getPhotos, addPhoto, showPhoto, editPhoto, deletePhoto } = require("../controllers/photoController");
 const { isAdmin, isAdminOrVolunteer } = require('../servicesHelpers/isRole')
+const { verifyToken } = require('../servicesHelpers/JWTgenerator')
 
 // router.use(userAuthenticated)
 // const noAuth = (req, res) => {
@@ -20,16 +21,16 @@ router.get('/test', (req, res) => {
 router.get("/",  getPhotos)
 
 // CREATE addPhoto
-router.post('/addPhoto', isAdminOrVolunteer, addPhoto)
+router.post('/addPhoto',verifyToken, isAdminOrVolunteer, addPhoto)
 
 //EDIT editPhoto
-router.patch('/:photo_id', isAdminOrVolunteer, editPhoto)
+router.patch('/:photo_id',verifyToken, isAdminOrVolunteer, editPhoto)
 
 //SHOW showPhoto
 router.get('/:photo_id', showPhoto)
 
 //DELETE deletePhoto
-router.delete('/:photo_id', isAdmin, deletePhoto)
+router.delete('/:photo_id',verifyToken, isAdmin, deletePhoto)
 
 
 
