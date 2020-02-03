@@ -42,6 +42,7 @@ for (let i = 0; i < users.length; i++) {
 			return exit(new Error('error seeding process cancelled'))
 		} else {
 			console.log('seeded')
+			console.log(result)
 			done++
 			if (done === users.length) {
 				exit()

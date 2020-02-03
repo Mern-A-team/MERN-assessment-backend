@@ -95,7 +95,6 @@ describe('Route CRUD Testing', function() {
 							role: 'volunteer'
 						})
 						.then(res => {
-							console.log('user created')
 							chai
 								.request(app)
 								.post('/user/authorise')

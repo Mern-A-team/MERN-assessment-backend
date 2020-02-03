@@ -1,4 +1,30 @@
 categoryModel = require('../database/schemas/categorySchema')
+PhotoModel = require('../database/schemas/photoSchema')
+
+// Helper function for the destroyCategory function to clean up any category
+//  references in the image array.
+
+// FINISH ME!!
+const categoryCleanUp = categoryId => {
+	PhotoModel.find((err, photos) => {
+		console.log(photos)
+		for (let x in photos) {
+			let categoryIndex = photos[x].category.findIndex(
+				element => element === categoryId
+			)
+			if (categoryIndex !== -1) {
+				let newArray = photos[x].category.splice(categoryIndex, 1)
+				photos[x].update(
+					{ category: newArray },
+					{ new: true },
+					(err, result) => {
+						console.log(photos[x])
+					}
+				)
+			}
+		}
+	})
+}
 
 // CRUDS
 
@@ -38,7 +64,7 @@ const updateCategory = (req, res) => {
 	categoryModel.findOneAndUpdate(
 		{ _id: req.params.category_id },
 		req.body,
-		{ new: true, runValidators: true },
+		{ new: true, runValidators: true, useFindAndModify: false },
 		function(err, updatedCategory) {
 			if (err || !updatedCategory) {
 				res.status(500)
@@ -48,9 +74,23 @@ const updateCategory = (req, res) => {
 		}
 	)
 }
+// Deleting a category
+const destroyCategory = (req, res) => {
+	categoryModel.deleteOne({ _id: req.params.category_id }, err => {
+		if (err) {
+			res.status(500).json('Something went wrong')
+		} else {
+			res.status(200).json({ message: 'Category deleted!' })
+			categoryCleanUp(req.params.category_id)
+		}
+	})
+}
 
 module.exports = {
 	createCategory,
 	getCategories,
-	updateCategory
+	updateCategory,
+	destroyCategory,
+	// exporting for testing
+	categoryCleanUp
 }

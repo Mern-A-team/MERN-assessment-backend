@@ -155,7 +155,6 @@ describe('Photo schema tests', function() {
 
         it('should be an array', function(done) {
             categoryTest2.validate(err => {
-                console.log(err)
                 expect(err).to.exist
                 expect(err.name).to.equal("ValidationError")
                 })

@@ -112,7 +112,7 @@ describe('Photo CRUD testing', function() {
                     .then(photo => {
                 chai
                     .request(app)
-                    .put(`/photos/${photo._id}`)
+                    .patch(`/photos/${photo._id}`)
                     .set('Authorization', `Bearer ${volunteerToken}`)
                     .send({
                         name: 'Test Passes',
@@ -143,7 +143,7 @@ describe('Photo CRUD testing', function() {
                 .then(photos => {
             chai
                 .request(app)
-                .put(`/photos/${photos[0]._id}`)
+                .patch(`/photos/${photos[0]._id}`)
                 .set('Authorization', `Bearer ${adminToken}`)
                 .send({
                     name: 'Test Passes',
@@ -173,7 +173,7 @@ describe('Photo CRUD testing', function() {
                 .then(photo => {
             chai
                 .request(app)
-                .put(`/photos/${photo._id}`)
+                .patch(`/photos/${photo._id}`)
                 .set('Authorization', null)
                 .send({
                     name: 'Test Passes',

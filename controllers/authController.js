@@ -23,8 +23,8 @@ const authenticateUser = async (req, res) => {
 						.status(401)
 						.json({ errorMessage: 'Please provide a valid password.' })
 				} else if (auth === true) {
-                    let token = await JWTservice.generateToken(user)
-                    res.status(200).json({token:token})
+					let token = await JWTservice.generateToken(user)
+					res.status(200).json({ token: token })
 				}
 			})
 		}
