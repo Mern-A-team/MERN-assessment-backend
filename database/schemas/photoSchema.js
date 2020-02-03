@@ -1,13 +1,13 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-let isUnique
+// let isUnique
 
-const idValidators = [
-    {validator: idNumber => isUnique(idNumber),
-    msg: "This item ID has already been entered. Please check original item."}
-    // err: "An error"}
-]
+// const idValidators = [
+//     {validator: idNumber => isUnique(idNumber),
+//     msg: "This item ID has already been entered. Please check original item."}
+//     // err: "An error"}
+// ]
 
 
 const PhotoSchema = new Schema(
@@ -19,7 +19,6 @@ const PhotoSchema = new Schema(
     idNumber: {
         type: String,
         // validate: idValidators,
-        validate: idValidators,
         required: true
         // unique: true
     },
@@ -44,11 +43,11 @@ const PhotoSchema = new Schema(
 const photoModel = mongoose.model('photo', PhotoSchema)
 
 
-isUnique = idNumber => {
-	let result = photoModel.find({ idNumber: idNumber }).then(result => {
-		return result.length >= 1 ? false : true
-	})
-	return result
-}
+// isUnique = idNumber => {
+// 	let result = photoModel.find({ idNumber: idNumber }).then(result => {
+// 		return result.length >= 1 ? false : true
+// 	})
+// 	return result
+// }
 
 module.exports = photoModel
