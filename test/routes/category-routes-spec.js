@@ -94,7 +94,7 @@ describe('Category CRUD testing', function() {
 					} else {
 						chai
 							.request(app)
-							.put(`/categories/${category.id}`)
+							.patch(`/categories/${category.id}`)
 							.set('Authorization', `Bearer ${volunteerToken}`)
 							.send({
 								name: 'Updated'
@@ -125,7 +125,7 @@ describe('Category CRUD testing', function() {
 					} else {
 						chai
 							.request(app)
-							.put(`/categories/${category.id}`)
+							.patch(`/categories/${category.id}`)
 							.set('Authorization', `Bearer ${adminToken}`)
 							.send({
 								name: 'Updated!!'

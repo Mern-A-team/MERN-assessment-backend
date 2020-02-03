@@ -38,7 +38,7 @@ nameUnique = name => {
 }
 
 parentExists = parent => {
-	let result = categoryModel.find({ parent: `${parent}` }).then(result => {
+	let result = categoryModel.find({ name: `${parent}` }).then(result => {
 		return (parent === "All") || (result.length >= 1) ? true : false
 	})
 

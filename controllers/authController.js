@@ -4,7 +4,6 @@ const JWTservice = require('../servicesHelpers/JWTgenerator')
 
 //  User authentication function
 const authenticateUser = async (req, res) => {
-	console.log(req.body)
 	let { username, password } = req.body
 	userModel.findOne({ username: `${username}` }, (err, user) => {
 		if (err) {

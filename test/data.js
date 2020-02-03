@@ -20,8 +20,16 @@ let volunteerUser = {
 	role: 'volunteer',
 	_id: 'dfgh28723bvcds987'
 }
+let guestUser = {
+	username: 'GuestUser',
+	password: 'Volly1$',
+	role: 'guest',
+	_id: 'dfgh28723bvcds987'
+}
+
 let adminToken = JWT.generateToken(user)
 let volunteerToken = JWT.generateToken(volunteerUser)
+let guestToken = JWT.generateToken(guestUser)
 
 let EditUser = new userModel({
 	username: 'EditUser',
@@ -42,7 +50,7 @@ const photoData = [
 		name: 'Photo1',
 		idNumber: '01',
 		category: ['23234124124', '412412412'],
-		description: 'Photo 1 !!!!' ,
+		description: 'Photo 1 !!!!',
 		fileRef: 'Reference1'
 	}),
 	new photoModel({
@@ -60,10 +68,28 @@ const photoData = [
 		fileRef: 'Reference3'
 	})
 ]
+let testPhoto1 = new photoModel({
+	name: 'testPhoto1',
+	idNumber: 'mmb-897',
+	location: 'Files',
+	category: ['people, year, 1942'],
+	description: 'Testing a test photo',
+	fileRef: 'ajsd0'
+})
+
+const createPhoto = () => {
+	testPhoto1.save((err, res) => {
+		if (!err) {
+			console.log('photo saved!')
+		}
+	})
+}
 
 module.exports = {
 	adminToken,
 	volunteerToken,
 	createUser,
-	photoData
+	photoData,
+	guestToken,
+	createPhoto
 }

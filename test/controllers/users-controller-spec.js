@@ -3,22 +3,26 @@ process.env.NODE_ENV = 'test'
 // require the user model
 const userModel = require('../../database/schemas/userSchema')
 // Destructuring the config variables from the config file
-const {app, chaiHttp, chai, expect, mongoose} = require('../test-config')
+const { app, chaiHttp, chai, expect, mongoose } = require('../test-config')
 // instructing chai to use the http module
 chai.use(chaiHttp)
 // requiring the hardcoded admin token from the admin file
-const {adminToken} = require('../data')
+const { adminToken } = require('../data')
 
 describe('User controller tests', function() {
 	before(function(done) {
-		mongoose.connection
-			.dropCollection('categories')
-			.catch(err => {
-				if (err) {
-					expect(err).to.exist
-				}
-			})
-			.then(done())
+		if (mongoose.connection.collection('users')) {
+			mongoose.connection
+				.dropCollection('users')
+				.catch(err => {
+					if (err) {
+						expect(err).to.exist
+					}
+				})
+				.then(done())
+		} else {
+			done()
+		}
 	})
 
 	it('should not save a user with an unhashed password', function(done) {
@@ -41,7 +45,10 @@ describe('User controller tests', function() {
 					userModel.findOne({ username: 'hashUser' }).then(hashedUser => {
 						// note that bcrypt will return false on 2 plain text passwords. It will
 						// only return true if comparing to a hash and that hash matches the plain text.
-						bcrypt.compare(user.password, hashedUser.password, function(err, res) {
+						bcrypt.compare(user.password, hashedUser.password, function(
+							err,
+							res
+						) {
 							if (res === true) {
 								done()
 							} else {

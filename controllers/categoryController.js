@@ -64,7 +64,7 @@ const updateCategory = (req, res) => {
 	categoryModel.findOneAndUpdate(
 		{ _id: req.params.category_id },
 		req.body,
-		{ new: true, runValidators: true },
+		{ new: true, runValidators: true, useFindAndModify: false },
 		function(err, updatedCategory) {
 			if (err || !updatedCategory) {
 				res.status(500)
