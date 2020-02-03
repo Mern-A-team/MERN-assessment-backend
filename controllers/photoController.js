@@ -84,7 +84,7 @@ const editPhoto = (req, res) => {
 //if successful and 500 (server error) if an error.
 
 const deletePhoto = (req, res) => {
-	Photo.findByIdAndDelete({ _id: req.params.photo_id }, err => {
+	photoModel.findByIdAndDelete({ _id: req.params.photo_id }, err => {
 		if (err) {
 			res.status(500).send('Something went wrong')
 		} else {
