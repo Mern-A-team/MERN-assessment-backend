@@ -4,23 +4,20 @@ PhotoModel = require('../database/schemas/photoSchema')
 // Helper function for the destroyCategory function to clean up any category
 //  references in the image array.
 
-// FINISH ME!!
-const categoryCleanUp = categoryId => {
+const categoryCleanUp = category => {
 	PhotoModel.find((err, photos) => {
-		console.log(photos)
 		for (let x in photos) {
 			let categoryIndex = photos[x].category.findIndex(
-				element => element === categoryId
+				element => element === category.name
 			)
 			if (categoryIndex !== -1) {
-				let newArray = photos[x].category.splice(categoryIndex, 1)
-				photos[x].update(
-					{ category: newArray },
-					{ new: true },
-					(err, result) => {
-						console.log(photos[x])
-					}
-				)
+				let newArray = photos[x].category.filter((value, index) => {
+					return index !== categoryIndex
+				})
+				console.log(newArray)
+				photos[x].update({ category: newArray }, (err, done) => {
+					return done
+				})
 			}
 		}
 	})
@@ -75,13 +72,14 @@ const updateCategory = (req, res) => {
 	)
 }
 // Deleting a category
-const destroyCategory = (req, res) => {
+const destroyCategory = async (req, res) => {
+	let category = await categoryModel.findOne({ _id: req.params.category_id })
 	categoryModel.deleteOne({ _id: req.params.category_id }, err => {
 		if (err) {
 			res.status(500).json('Something went wrong')
 		} else {
 			res.status(200).json({ message: 'Category deleted!' })
-			categoryCleanUp(req.params.category_id)
+			categoryCleanUp(category)
 		}
 	})
 }
