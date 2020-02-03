@@ -41,6 +41,10 @@ describe('User controller tests', function() {
 			.end((err, res) => {
 				if (err) {
 					done(err)
+						.request(app)
+						.post('/user')
+						.set('Authorization', `Bearer ${adminToken}`)
+						.send(user)
 				} else {
 					userModel.findOne({ username: 'hashUser' }).then(hashedUser => {
 						// note that bcrypt will return false on 2 plain text passwords. It will
