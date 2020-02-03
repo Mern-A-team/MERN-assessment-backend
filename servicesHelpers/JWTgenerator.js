@@ -1,7 +1,7 @@
 // requiring the jsonwebtoken package
 const JWT = require('jsonwebtoken')
 // setting the token expiry
-const expiry = '10s'
+const expiry = '6h'
 
 const { splitToken } = require('../servicesHelpers/isRole')
 

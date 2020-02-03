@@ -120,4 +120,3 @@ describe('Authorisation Tests', function() {
 		})
 	})
 })
-console.log('yep')
