@@ -1,26 +1,26 @@
-// Requiring the express module and creating an instance of it assigned to app.
-const express = require('express'),
-	  app = express(),
-	
-// Requiring the mongoose connection function from its helper file.
-const { mongooseConnect } = require('./config/mongoose-connection'),
+// loading environment variables in using dotenv if not in the production environment
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config()
+}
 
 // assigning the port variable from the .env file
 const PORT = process.env.PORT || 3001
+
+// Requiring the express module and creating an instance of it assigned to app.
+const express = require('express'),
+	  app = express()
+	
+// Requiring the mongoose connection function from its helper file.
+const { mongooseConnect } = require('./config/mongoose-connection')
 
 // requiring and assigning the routers.
 const routes = require('./routes/index-routes'),
       photoRouter = require('./routes/photoRoutes'),
       userRouter = require('./routes/userRoutes'),
-	  categoryRouter = require('./routes/category-routes'),
+	  categoryRouter = require('./routes/category-routes')
 	  
 // Requiring and assigning Cors middleware for cors configuration requirments  
 const cors = require('cors')
-
-// loading environment variables in using dotenv if not in the production environment
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').config()
-}
 
 // connect to MongoDb with the mongoose connect function
 mongooseConnect(process.env.NODE_ENV)

@@ -74,7 +74,8 @@ let testPhoto1 = new photoModel({
 	location: 'Files',
 	category: ['people, year, 1942'],
 	description: 'Testing a test photo',
-	fileRef: 'ajsd0'
+	fileRef: 'ajsd0',
+	fileName: "http://photo.com"
 })
 
 const createPhoto = () => {
