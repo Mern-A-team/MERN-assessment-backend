@@ -35,6 +35,10 @@ const PhotoSchema = new Schema({
 	fileRef: {
 		type: String,
 		required: true
+	},
+	fileName: {
+		type: String,
+		required: true
 	}
 })
 

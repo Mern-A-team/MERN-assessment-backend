@@ -28,7 +28,6 @@ async function verifyToken(req, res, next) {
 	let token = await splitToken(req.headers.authorization)
 	let expTime = Date.now().valueOf() / 1000
 	JWT.verify(token, process.env.JWT_SECRET, function(err, decoded) {
-		console.log('verify function internal')
 		if (err || !decoded) {
 			return res.status(401).json('Invalid authentication')
 		} else if (expTime > decoded.exp) {

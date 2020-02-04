@@ -18,7 +18,7 @@ const getPhotos = async (req, res) => {
 // Create
 const addPhoto = async (req, res) => {
 	// Destructures elements of a photo from req.body
-	const { name, idNumber, location, category, description, fileRef } = req.body
+	const { name, idNumber, location, category, description, fileRef, fileName } = req.body
 	// Creates a new photo item with destructured parameters
 	const photo = new photoModel({
 		name,
@@ -27,7 +27,8 @@ const addPhoto = async (req, res) => {
 		description,
 		location,
 		description,
-		fileRef
+		fileRef,
+		fileName
 	})
 	// Saves photo to database
 	photo
