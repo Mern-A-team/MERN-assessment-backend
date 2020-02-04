@@ -3,8 +3,7 @@ const bcrypt = require('bcrypt')
 
 // Declare the validation function identifiers. We can't define the
 // functions themselves until we have a valid model.
-let usernameValidator, isUnique // } = require('./schema-validators')
-let passwordVal
+let usernameValidator, isUnique, passwordVal
 
 const usernameValidators = [
 	{
@@ -19,6 +18,7 @@ const usernameValidators = [
 		msg: 'Im sorry! that username is taken.'
 	}
 ]
+
 // Password validation functions.
 const passwordValidators = [
 	{
@@ -27,24 +27,31 @@ const passwordValidators = [
 			'Your password must have 6 characters including a special character and a number.'
 	}
 ]
-// Defining the user schema including validation and data types.
+
+// Declaring and defining the user schema including validation and data types.
 const UserSchema = new mongoose.Schema({
+
+	// The required username field must have a min of 3 characters and has been passed the custom 
+	// validator object.
 	username: {
 		type: String,
 		required: [true, 'The username field is required!'],
 		minlength: [3, 'The username must contain 3 or more characters.'],
 		validate: usernameValidators
 	},
+	// The required password field has been passed the custom validator object.
 	password: {
 		type: String,
 		required: [true, 'The password field is required!'],
 		validate: passwordValidators
 	},
+	// The required role field.
 	role: {
 		type: String,
 		required: [true, 'Please provide a user role.']
 	}
-	// this pre hook ensures that updated passwords are hashed before storing.
+
+// this pre hook ensures that updated passwords are hashed before storing.
 }).pre('findOneAndUpdate', async function() {
 	const docToUpdate = await this.model.findOne(this.getQuery())
 	if (docToUpdate.password !== this._update.password) {
