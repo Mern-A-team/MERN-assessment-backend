@@ -96,7 +96,7 @@ const deletePhoto = (req, res) => {
 	})
 }
 
-// exporting the modules
+// exporting the functions.
 module.exports = {
 	getPhotos,
 	addPhoto,
