@@ -3,7 +3,11 @@ const categoryModel = require('../database/schemas/categorySchema'),
       PhotoModel = require('../database/schemas/photoSchema')
 
 // Helper function for the destroyCategory function to clean up any category
+<<<<<<< HEAD
 // references in the image array.
+=======
+//  references in the image array.
+>>>>>>> f0414fcdcb343e2c010fc15a8fb0cafae85d5c29
 const categoryCleanUp = category => {
 
 	// Mongoose query finds all photos.
@@ -20,9 +24,31 @@ const categoryCleanUp = category => {
 				let newArray = photos[x].category.filter((value, index) => {
 					return index !== categoryIndex
 				})
-				if(newArray.length === 0){
+				if (newArray.length === 0) {
 					newArray.push('unassigned')
 				}
+				photos[x].update({ category: newArray }, (err, done) => {
+					return done
+				})
+			}
+		}
+	})
+}
+
+// Helper function for the edit category function to ensure names in the image arrays are updated.
+const editCategoryCleanup = (oldName, updatedName) => {
+	PhotoModel.find((err, photos) => {
+		console.log(oldName)
+		for (let x in photos) {
+			let categoryIndex = photos[x].category.findIndex(
+				element => element === oldName
+			)
+			console.log(categoryIndex)
+			if (categoryIndex !== -1) {
+				let newArray = photos[x].category.filter((value, index) => {
+					return index !== categoryIndex
+				})
+				newArray.push(updatedName)
 				photos[x].update({ category: newArray }, (err, done) => {
 					return done
 				})
@@ -65,7 +91,11 @@ const getCategories = (req, res) => {
 }
 
 // Patch category
-const updateCategory = (req, res) => {
+const updateCategory = async (req, res) => {
+	let oldName
+	if (req.body.name) {
+		oldName = await categoryModel.findOne({ _id: req.params.category_id })
+	}
 	categoryModel.findOneAndUpdate(
 		{ _id: req.params.category_id },
 		req.body,
@@ -75,6 +105,9 @@ const updateCategory = (req, res) => {
 				res.status(500)
 			} else {
 				res.status(200).json({ message: 'Category updated!' })
+				if (req.body.name) {
+					editCategoryCleanup(oldName.name, updatedCategory.name)
+				}
 			}
 		}
 	)
