@@ -1,11 +1,20 @@
 // Requiring the express module and creating an instance of it assigned to app.
-const express = require('express')
-const app = express()
-// require the mongoose connection function
-const { mongooseConnect } = require('./config/mongoose-connection')
-// requiring index routes
-const routes = require('./routes/index-routes')
-const photoRouter = require('./routes/photoRoutes')
+const express = require('express'),
+	  app = express(),
+	
+// Requiring the mongoose connection function from its helper file.
+const { mongooseConnect } = require('./config/mongoose-connection'),
+
+// assigning the port variable from the .env file
+const PORT = process.env.PORT || 3001
+
+// requiring and assigning the routers.
+const routes = require('./routes/index-routes'),
+      photoRouter = require('./routes/photoRoutes'),
+      userRouter = require('./routes/userRoutes'),
+	  categoryRouter = require('./routes/category-routes'),
+	  
+// Requiring and assigning Cors middleware for cors configuration requirments  
 const cors = require('cors')
 
 // loading environment variables in using dotenv if not in the production environment
@@ -13,15 +22,15 @@ if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').config()
 }
 
-// connect to mongoose
+// connect to MongoDb with the mongoose connect function
 mongooseConnect(process.env.NODE_ENV)
-// assigning the port variable from the .env file
-const PORT = process.env.PORT || 3001
 
-//  MIDDLEWARES
+// MIDDLEWARE
+
+// An array of allowed origins for development and production.
 const allowedOrigins = [process.env.DEV_CORS, process.env.DEP_CORS]
 
-
+// configuring the CORS Middleware
 app.use(
 	cors({
 		origin: function(origin, callback) {
@@ -37,15 +46,15 @@ app.use(
 	})
 )
 
-// enables us to access json vai the req.body
+// Middleware for extracting body params.
 app.use(express.json())
 app.use(express.urlencoded())
 
 // ROUTES
 app.use('/', routes)
-app.use('/user', require('./routes/userRoutes'))
+app.use('/user', userRouter)
 app.use('/photos', photoRouter)
-app.use('/categories', require('./routes/category-routes'))
+app.use('/categories', categoryRouter)
 
 //  SERVER LISTENING
 app.listen(PORT, () =>
