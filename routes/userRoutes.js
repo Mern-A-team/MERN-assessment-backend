@@ -8,9 +8,10 @@ const {
 	getUser,
 	createUser,
 	updateUser,
-	destroyUser,
-	authenticateUser
+	destroyUser
 } = require('../controllers/usersController')
+
+const { authenticateUser } = require('../controllers/authController')
 
 // requiring the isAdmin and verifyToken functions from the approproate files.
 const { isAdmin } = require('../servicesHelpers/isRole'),
