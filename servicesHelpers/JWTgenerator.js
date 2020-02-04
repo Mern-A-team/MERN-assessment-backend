@@ -1,5 +1,6 @@
 // requiring the jsonwebtoken package
 const JWT = require('jsonwebtoken')
+
 // setting the token expiry
 const expiry = '6h'
 
