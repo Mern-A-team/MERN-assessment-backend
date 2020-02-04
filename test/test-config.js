@@ -9,6 +9,7 @@ const { mongoose } = require('../config/mongoose-connection')
 // requiring our app from the app file for use by chai.
 const { app } = require('../app')
 
+// exporting our constants
 module.exports = {
 	mongoose,
 	chai,

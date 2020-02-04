@@ -63,7 +63,8 @@ describe('Photo CRUD testing', function() {
                         location: "File cabinet",
                         category: ["array", "of", "subjects"],
                         description: "Blah blah",
-                        fileRef: "id string"
+                        fileRef: "id string",
+                        fileName: "http://myphoto.com"
                     })
                     .end((err, res) => {
                         if (err) {
@@ -88,7 +89,8 @@ describe('Photo CRUD testing', function() {
                         location: "File cabinet",
                         category: ["array", "of", "subjects"],
                         description: "Blah blah",
-                        fileRef: "id string"
+                        fileRef: "id string",
+                        fileName: "http://Myphoto.com"
                     })
                     .end((err, res) => {
                         if (err) {
@@ -120,7 +122,8 @@ describe('Photo CRUD testing', function() {
                         location: "File cabinet",
                         category: ["array", "of", "subjects"],
                         description: "Blah blah",
-                        fileRef: "id string"
+                        fileRef: "id string",
+                        fileName: "http://MyPhoto.com"
                     })
                     .end((err, res) => {
                         if(err) {
@@ -151,7 +154,8 @@ describe('Photo CRUD testing', function() {
                     location: "File cabinet",
                     category: ["array", "of", "subjects"],
                     description: "Blah blah",
-                    fileRef: "id string"
+                    fileRef: "id string",
+                    fileName: "Http://myphoto.com"
                 })
                 .end((err, res) => {
                     if(err) {
@@ -181,7 +185,8 @@ describe('Photo CRUD testing', function() {
                     location: "File cabinet",
                     category: ["array", "of", "subjects"],
                     description: "Blah blah",
-                    fileRef: "id string"
+                    fileRef: "id string",
+                    fileName: "http://photome.com"
                 })
                 .end((err, res) => {
                     if(err) {
@@ -205,7 +210,8 @@ describe('Photo CRUD testing', function() {
                 location: "File cabinet",
                 category: ["array", "of", "subjects"],
                 description: "Blah blah",
-                fileRef: "id string"
+                fileRef: "id string",
+                fileName: "http://myphoto.com"
             })
             newPhoto.save((err, photo) => {
                 chai

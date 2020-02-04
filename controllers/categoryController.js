@@ -1,10 +1,21 @@
-categoryModel = require('../database/schemas/categorySchema')
-PhotoModel = require('../database/schemas/photoSchema')
+// Requiring and assigning the category and photo Models.
+const categoryModel = require('../database/schemas/categorySchema'),
+      PhotoModel = require('../database/schemas/photoSchema')
 
 // Helper function for the destroyCategory function to clean up any category
+<<<<<<< HEAD
+// references in the image array.
+=======
 //  references in the image array.
+>>>>>>> f0414fcdcb343e2c010fc15a8fb0cafae85d5c29
 const categoryCleanUp = category => {
+
+	// Mongoose query finds all photos.
 	PhotoModel.find((err, photos) => {
+
+		// Iterate through all photos and check to see if the category array within them
+		// contains the deleted category. If it does then remove it from the array and update the photo
+		// to save the results. 
 		for (let x in photos) {
 			let categoryIndex = photos[x].category.findIndex(
 				element => element === category.name
@@ -64,7 +75,7 @@ const createCategory = (req, res) => {
 	)
 }
 
-// get request for cateogories returns a json resposne with an array of category objects
+// Get Categories
 const getCategories = (req, res) => {
 	categoryModel.find((err, categories) => {
 		if (err) {
@@ -79,7 +90,7 @@ const getCategories = (req, res) => {
 	})
 }
 
-// Patch request updates category information...either name or parent.
+// Patch category
 const updateCategory = async (req, res) => {
 	let oldName
 	if (req.body.name) {
@@ -101,6 +112,7 @@ const updateCategory = async (req, res) => {
 		}
 	)
 }
+
 // Deleting a category
 const destroyCategory = async (req, res) => {
 	let category = await categoryModel.findOne({ _id: req.params.category_id })
@@ -114,6 +126,7 @@ const destroyCategory = async (req, res) => {
 	})
 }
 
+// exporting the functions.
 module.exports = {
 	createCategory,
 	getCategories,

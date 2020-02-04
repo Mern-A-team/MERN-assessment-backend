@@ -1,22 +1,25 @@
-const express = require('express')
-const Router = express.Router()
-const categoryController = require('../controllers/categoryController')
-const { isAdmin } = require('../servicesHelpers/isRole')
-const { verifyToken } = require('../servicesHelpers/JWTgenerator')
+// Requiring express and creating and instance of the express router
+const express = require('express'),
+	Router = express.Router()
 
-Router.post('/', verifyToken, isAdmin, categoryController.createCategory)
-Router.get('/', categoryController.getCategories)
-Router.delete(
-	'/:category_id',
-	verifyToken,
-	isAdmin,
-	categoryController.destroyCategory
-)
-Router.patch(
-	'/:category_id',
-	verifyToken,
-	isAdmin,
-	categoryController.updateCategory
-)
+// Destructuring the category controller methods from the category controller file.
+const {
+	createCategory,
+	getCategories,
+	destroyCategory,
+	updateCategory
+} = require('../controllers/categoryController')
 
+// Requiring the isAdmin and verifyToken functions from the appropriate files.
+const { isAdmin } = require('../servicesHelpers/isRole'),
+	  { verifyToken } = require('../servicesHelpers/JWTgenerator')
+
+// Category Crud Routes.
+
+// The isAdmin & verifyToken functions have been passed in as middleware.
+Router.post('/', verifyToken, isAdmin, createCategory)
+Router.get('/', getCategories)
+Router.delete('/:category_id', verifyToken, isAdmin, destroyCategory)
+Router.patch('/:category_id', verifyToken, isAdmin, updateCategory)
+// exporting the Router
 module.exports = Router

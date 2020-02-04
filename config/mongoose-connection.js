@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
-// assign the environment
 
 // connecting to the MongoDB Database using mongoose. The catch block will
 // log an error if connection error. a seperate test database is used to keep the development
-// database seeded when running tests.
+// database seeded when running tests. We also configured a live option to tets our connection and
+// ensure we were live.
+
+// Test database
 const mongooseConnect = env => {
 	if (env === 'test') {
 		mongoose
@@ -14,6 +16,8 @@ const mongooseConnect = env => {
 			})
 			.then(console.log('connected to the test database'))
 			.catch(error => console.log(error))
+
+	// Production database. used for testing connection an seeding data.
 	} else if (env === 'production') {
 		mongoose
 			.connect(
@@ -26,10 +30,10 @@ const mongooseConnect = env => {
 			)
 			.then(console.log('connected to archivise live!'))
 			.catch(error => console.log(error))
+
+	// Development databse
 	} else {
 		mongoose
-		//USE BELOW STRING FOR LIVE DATABASE
-		//mongodb+srv://cademo:cademo@cluster0-v0web.mongodb.net/test?retryWrites=true&w=majority
 			.connect('mongodb://localhost/archivise', {
 				useNewUrlParser: true,
 				useUnifiedTopology: true
@@ -37,10 +41,10 @@ const mongooseConnect = env => {
 			.then(console.log('connected to the development database'))
 			.catch(error => console.log(error))
 	}
-	// This will listen and log any errors after initial connection
 	mongoose.connection.on('error', err => console.log(err))
 }
 
+// exporting the connection and the function
 module.exports = {
 	mongooseConnect,
 	mongoose

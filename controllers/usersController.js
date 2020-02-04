@@ -1,5 +1,6 @@
-const userModel = require('../database/schemas/userSchema')
-const bcrypt = require('bcrypt')
+// Require and assign the user Model and bcrypt for password hashing.
+const userModel = require('../database/schemas/userSchema'),
+      bcrypt = require('bcrypt')
 
 // USER CRUD FUNCTIONS!
 
@@ -17,7 +18,7 @@ const getUser = (req, res) => {
 	})
 }
 
-// Return user for admin dashboard
+// Get Users
 const getUsers = (req, res) => {
 	userModel.find().then(users => {
 		let results = []
@@ -32,8 +33,10 @@ const getUsers = (req, res) => {
 		res.status(200).json({ users: results })
 	})
 }
+
 // Create a user upon registration from admin
 const createUser = (req, res) => {
+
 	// Destructure the username, password and role from req.body
 	let { username, password, role } = req.body
 
@@ -46,26 +49,30 @@ const createUser = (req, res) => {
 
 	// manually validate to ensure that the password meets the validations before hashing the password.
 	user.validate(function(err) {
+
 		// assign the error message depending on which error it is. i.e username, password or role error
 		if (err) {
 			let path = Object.keys(err.errors)[0]
 			let message = err.errors[path].message
 			res.status(400).json(message)
-			//  if there is no error then hash the password with bcrypt and assign the hash to the user instance
-			// before saving.
+
+		//  if there is no error then hash the password with bcrypt and assign the hash to the user instance
+		// before saving.
 		} else {
 			bcrypt.hash(user.password, 10, function(err, hash) {
+
+				// If the password doesnt hash then throw an internal server error
 				if (err) {
-					// If the password doesnt hash then throw an internal server error
 					res.status(500).send()
-					// If hash is successful then assign the new hashed password and save
+
+				// If hash is successful then assign the new hashed password and save
 				} else {
 					user.password = hash
 					user.save(function(err) {
 						if (!err) {
 							res.status(201).json('User successfully created!')
-							// there shouldnt be any errors but to avoid problems
-							// send a 500 if save errors occur
+						// there shouldnt be any errors but to avoid problems
+						// send a 500 if save errors occur
 						} else {
 							res.status(500).json('something went wrong')
 						}
@@ -76,7 +83,9 @@ const createUser = (req, res) => {
 	})
 }
 
+// Patch user.
 const updateUser = (req, res) => {
+
 	userModel.findOneAndUpdate(
 		{ _id: req.params.user_id },
 		req.body,
@@ -93,6 +102,7 @@ const updateUser = (req, res) => {
 	)
 }
 
+// Delete user.
 const destroyUser = (req, res) => {
 	userModel.deleteOne({ _id: req.params.user_id }, err => {
 		if (err) {
@@ -103,6 +113,7 @@ const destroyUser = (req, res) => {
 	})
 }
 
+// exporting the functions.
 module.exports = {
 	createUser,
 	updateUser,

@@ -1,9 +1,5 @@
+// Require and assign the photo model.
 const photoModel = require('../database/schemas/photoSchema')
-
-const { authenticateUser } = require('./usersController')
-
-// Need to ensure user validation before any crud can be implemented.
-// const userValidation = require("../controllers/authController")
 
 // Photo gallery
 // searches model for all and if no error, getPhotos will return the images
@@ -17,8 +13,10 @@ const getPhotos = async (req, res) => {
 
 // Create
 const addPhoto = async (req, res) => {
+
 	// Destructures elements of a photo from req.body
-	const { name, idNumber, location, category, description, fileRef } = req.body
+	const { name, idNumber, location, category, description, fileRef, fileName } = req.body
+
 	// Creates a new photo item with destructured parameters
 	const photo = new photoModel({
 		name,
@@ -27,8 +25,10 @@ const addPhoto = async (req, res) => {
 		description,
 		location,
 		description,
-		fileRef
+		fileRef,
+		fileName
 	})
+
 	// Saves photo to database
 	photo
 		.save()
@@ -43,12 +43,15 @@ const addPhoto = async (req, res) => {
 //Searches database for object ID and returns and renders that photo
 //deconstructs id from the params and renders the restult
 const showPhoto = (req, res) => {
+
 	//obtains the id though the params
 	let { photo_id } = req.params
+
 	//identify the selected photo via photo variable
 	photoModel
 		.findById(photo_id)
 		.then(photo => {
+
 			//     //accounting for an error or not
 			res.status(200).send(photo)
 		})
@@ -65,9 +68,9 @@ const editPhoto = (req, res) => {
 			if (err) {
 				res.status(500).send(err)
 			} else {
+				
 				//Look for category array. If length is 0, push "unassigned"
 				//If category contains "unassigned" && length > 1, remove "unassigned"
-
 				let categories = req.body.category
 				categories = categories.filter(cat => cat !== 'unassigned')
 				if (categories.length === 0) {
@@ -93,7 +96,7 @@ const deletePhoto = (req, res) => {
 	})
 }
 
-// exporting the modules
+// exporting the functions.
 module.exports = {
 	getPhotos,
 	addPhoto,
