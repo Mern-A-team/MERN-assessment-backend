@@ -3,11 +3,7 @@ const categoryModel = require('../database/schemas/categorySchema'),
       PhotoModel = require('../database/schemas/photoSchema')
 
 // Helper function for the destroyCategory function to clean up any category
-<<<<<<< HEAD
 // references in the image array.
-=======
-//  references in the image array.
->>>>>>> f0414fcdcb343e2c010fc15a8fb0cafae85d5c29
 const categoryCleanUp = category => {
 
 	// Mongoose query finds all photos.
