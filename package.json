@@ -28,7 +28,7 @@
     "mocha": "^7.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.610.0",
+    "aws-sdk": "^2.814.0",
     "bcrypt": "^3.0.7",
     "cors": "^2.8.5",
     "express": "^4.17.1",
